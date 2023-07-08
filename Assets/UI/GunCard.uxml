@@ -1,0 +1,27 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:VisualElement name="Gun" class="gun-card-list-item">
+        <ui:VisualElement name="HeaderRow" class="property-border-color" style="border-bottom-width: 1px; flex-direction: row;">
+            <ui:Label text="Name" display-tooltip-when-elided="true" name="Name" style="margin-left: 0; margin-top: 0; font-size: 35px; -unity-font-style: bold; color: rgb(197, 197, 197); border-bottom-width: 0; width: 291px; padding-left: 20px;" />
+        </ui:VisualElement>
+        <ui:VisualElement name="DamageRow" class="property-border-color" style="border-bottom-width: 1px; flex-direction: row; justify-content: space-between;">
+            <ui:Label text="Damage" display-tooltip-when-elided="true" name="DamageLabel" style="margin-left: 0; margin-top: 0; font-size: 35px; -unity-font-style: bold; color: rgb(197, 197, 197); width: 60%; padding-left: 20px;" />
+            <ui:Label text="0" display-tooltip-when-elided="true" name="Damage" style="margin-left: 0; margin-top: 0; font-size: 35px; -unity-font-style: bold; color: rgb(197, 197, 197); flex-grow: 1; border-left-width: 0; border-left-color: rgb(255, 255, 255); border-right-color: rgb(255, 255, 255); border-top-color: rgb(255, 255, 255); border-bottom-color: rgb(255, 255, 255); padding-left: 0; -unity-text-align: upper-right; padding-right: 20px;" />
+        </ui:VisualElement>
+        <ui:VisualElement name="MagazineCapacityRow" class="property-border-color" style="border-bottom-width: 1px; flex-direction: row; justify-content: space-between;">
+            <ui:Label text="Magazine Capacity" display-tooltip-when-elided="true" name="MagazineCapacityLabel" style="margin-left: 0; margin-top: 0; font-size: 35px; -unity-font-style: bold; color: rgb(197, 197, 197); width: 60%; padding-left: 20px;" />
+            <ui:Label text="0" display-tooltip-when-elided="true" name="MagazineCapacity" style="margin-left: 0; margin-top: 0; font-size: 35px; -unity-font-style: bold; color: rgb(197, 197, 197); flex-grow: 1; border-left-width: 0; border-left-color: rgb(255, 255, 255); border-right-color: rgb(255, 255, 255); border-top-color: rgb(255, 255, 255); border-bottom-color: rgb(255, 255, 255); padding-left: 0; -unity-text-align: upper-right; padding-right: 20px;" />
+        </ui:VisualElement>
+        <ui:VisualElement name="FireRateRow" class="property-border-color" style="border-bottom-width: 1px; flex-direction: row; justify-content: space-between;">
+            <ui:Label text="Fire Rate" display-tooltip-when-elided="true" name="FireRateLabel" style="margin-left: 0; margin-top: 0; font-size: 35px; -unity-font-style: bold; color: rgb(197, 197, 197); width: 60%; padding-left: 20px;" />
+            <ui:Label text="0" display-tooltip-when-elided="true" name="FireRate" style="margin-left: 0; margin-top: 0; font-size: 35px; -unity-font-style: bold; color: rgb(197, 197, 197); flex-grow: 1; border-left-width: 0; border-left-color: rgb(255, 255, 255); border-right-color: rgb(255, 255, 255); border-top-color: rgb(255, 255, 255); border-bottom-color: rgb(255, 255, 255); padding-left: 0; -unity-text-align: upper-right; padding-right: 20px;" />
+        </ui:VisualElement>
+        <ui:VisualElement name="ReloadTimeRow" class="property-border-color" style="border-bottom-width: 1px; flex-direction: row; justify-content: space-between;">
+            <ui:Label text="Reload Time" display-tooltip-when-elided="true" name="ReloadTimeLabel" style="margin-left: 0; margin-top: 0; font-size: 35px; -unity-font-style: bold; color: rgb(197, 197, 197); width: 60%; padding-left: 20px;" />
+            <ui:Label text="0" display-tooltip-when-elided="true" name="ReloadTime" style="margin-left: 0; margin-top: 0; font-size: 35px; -unity-font-style: bold; color: rgb(197, 197, 197); flex-grow: 1; border-left-width: 0; border-left-color: rgb(255, 255, 255); border-right-color: rgb(255, 255, 255); border-top-color: rgb(255, 255, 255); border-bottom-color: rgb(255, 255, 255); padding-left: 0; -unity-text-align: upper-right; padding-right: 20px;" />
+        </ui:VisualElement>
+        <ui:VisualElement name="CostRow" class="property-border-color" style="border-bottom-width: 1px; flex-direction: row; justify-content: space-between;">
+            <ui:Label text="Cost" display-tooltip-when-elided="true" name="CostLabel" style="margin-left: 0; margin-top: 0; font-size: 35px; -unity-font-style: bold; color: rgb(197, 197, 197); width: 60%; padding-left: 20px;" />
+            <ui:Label text="0" display-tooltip-when-elided="true" name="Cost" style="margin-left: 0; margin-top: 0; font-size: 35px; -unity-font-style: bold; color: rgb(255, 224, 0); flex-grow: 1; border-left-width: 0; border-left-color: rgb(255, 255, 255); border-right-color: rgb(255, 255, 255); border-top-color: rgb(255, 255, 255); border-bottom-color: rgb(255, 255, 255); padding-left: 0; -unity-text-align: upper-right; padding-right: 20px;" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

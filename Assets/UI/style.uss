@@ -1,0 +1,14 @@
+.property-border-color {
+    border-left-color: rgba(255, 255, 255, 0.1);
+    border-right-color: rgba(255, 255, 255, 0.1);
+    border-top-color: rgba(255, 255, 255, 0.1);
+    border-bottom-color: rgba(255, 255, 255, 0.1);
+}
+
+.gun-card-list-item:hover {
+    background-color: rgba(164, 0, 0, 0.25);
+}
+
+.gun-card-list-item:selected {
+    background-color: rgb(164, 0, 0);
+}
