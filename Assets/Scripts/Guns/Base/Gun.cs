@@ -28,7 +28,7 @@ public class Gun : MonoBehaviour
         RELOAD
     }
 
-    public Gun()
+    protected virtual void Awake()
     {
         _states = new Dictionary<GunStates, State>()
         {

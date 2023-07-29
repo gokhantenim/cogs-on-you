@@ -57,9 +57,9 @@ public class GunSlot : MonoBehaviour
         CurrentGun.SetTarget(target);
 
         if (_rig == null) return;
+        //_rig.weight = target == null ? 0 : 1;
         if (target != null) return;
         SetTargetToIdle();
-        //_rig.weight = target == null ? 0 : 1;
     }
 
     public void InstantiateGun(GunDefinition gun)

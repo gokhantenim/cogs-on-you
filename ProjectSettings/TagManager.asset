@@ -8,6 +8,7 @@ TagManager:
   - Enemy
   - PlayerProjectile
   - EnemyProjectile
+  - Magnet
   layers:
   - Default
   - TransparentFX

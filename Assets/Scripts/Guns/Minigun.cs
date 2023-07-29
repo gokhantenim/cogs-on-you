@@ -8,13 +8,6 @@ public class Minigun : Gun
     [SerializeField] GameObject bulletPrefab;
     [SerializeField] Transform firePoint;
 
-    //public Minigun()
-    //{
-    //    damage = 100;
-    //    magazineCapacity = 50;
-    //    fireRate = 10;
-    //    reloadTime = 3;
-    //}
 
     public override void FireUpdate()
     {

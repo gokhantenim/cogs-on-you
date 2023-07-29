@@ -7,12 +7,24 @@ using UnityEngine.UI;
 
 public class GamePlayUI : MonoBehaviour
 {
-    public static GamePlayUI Instance;
+    public static GamePlayUI _instance;
+    public static GamePlayUI Instance
+    {
+        get
+        {
+            if (_instance == null)
+            {
+                _instance = FindObjectOfType<GamePlayUI>(true);
+            }
+            return _instance;
+        }
+    }
 
     [SerializeField] Image _greenBar;
     [SerializeField] Image _whiteBar;
     [SerializeField] TextMeshProUGUI _healthPercentText;
     [SerializeField] TextMeshProUGUI _totalCogsText;
+    [SerializeField] TextMeshProUGUI _totalEnemiesText;
     float _textHealthPercent = 1;
     float _healthPercent = 1;
     Tween _whiteBarTween;
@@ -21,7 +33,7 @@ public class GamePlayUI : MonoBehaviour
 
     void Awake()
     {
-        Instance = this;
+
     }
     void Start()
     {
@@ -64,5 +76,10 @@ public class GamePlayUI : MonoBehaviour
             _totalCogsText.text = val.ToString("N0");
         }, _totalCogs, totalCogs, 1).SetId("total-cogs");
         _totalCogs = totalCogs;
+    }
+
+    public void SetEnemyCounts(int remainEnemies, int totalEnemies)
+    {
+        _totalEnemiesText.text = remainEnemies.ToString() + " / " + totalEnemies.ToString();
     }
 }

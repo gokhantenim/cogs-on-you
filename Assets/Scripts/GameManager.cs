@@ -9,27 +9,34 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance;
     public List<GunDefinition> Guns;
     public GameObject CogPrefab;
+    public List<LevelDefinition> Levels;
+    public int CurrentLevelIndex = 0;
+    bool CurrentIsLastLevel => CurrentLevelIndex+1 >= Levels.Count;
     StateMachine _stateMachine = new();
+    State _homeState;
     State _warState;
     State _buildState;
 
-    public int TotalCogs = 0;
-
-    public PlayerController Player;
+    PlayerController _player => PlayerController.Instance;
 
     void Awake()
     {
         Instance = this;
+        _homeState = new(HomeEnter, HomeExit);
         _warState = new(WarEnter, WarExit);
         _buildState = new(BuildEnter, BuildExit);
     }
 
     void Start()
     {
-        _stateMachine.SetState(_warState);
-
-        //await Task.Delay(2000);
-        //_stateMachine.SetState(_buildState);
+#if UNITY_EDITOR
+        if (LevelEditorWindow.IsEditScene())
+        {
+            _stateMachine.SetState(_warState);
+            return;
+        }
+#endif
+        _stateMachine.SetState(_homeState);
     }
 
     // Update is called once per frame
@@ -38,11 +45,23 @@ public class GameManager : MonoBehaviour
         //_stateMachine.Update();
     }
 
+    void HomeEnter()
+    {
+        UIManager.Instance.HomeUI.SetActive(true);
+    }
+
+    void HomeExit()
+    {
+        UIManager.Instance.HomeUI.SetActive(false);
+    }
+
     void WarEnter()
     {
+        Debug.Log("Game War Enter");
+        LoadLevel();
         UIManager.Instance.GamePlayUI.gameObject.SetActive(true);
         CameraManager.Instance.FollowPlayer();
-        Player.StateMachine.SetState(Player.WarState);
+        _player.StateMachine.SetState(_player.WarState);
     }
 
     void WarExit()
@@ -50,11 +69,26 @@ public class GameManager : MonoBehaviour
         UIManager.Instance.GamePlayUI.gameObject.SetActive(false);
     }
 
+    IEnumerator BuildEnterSequence()
+    {
+        // 1 -  set player state build and fly
+        _player.StateMachine.SetState(_player.BuildState);
+        _player.Fly();
+        yield return new WaitForSeconds(1);
+        // 2 - face cam
+        CameraManager.Instance.FacePlayer();
+        // 3 - show ui
+        yield return new WaitForSeconds(0.5f);
+        UIManager.Instance.StateMachine.SetState(UIManager.Instance.BuildState);
+        yield return null;
+    }
+
     void BuildEnter()
     {
-        CameraManager.Instance.FacePlayer();
-        UIManager.Instance.StateMachine.SetState(UIManager.Instance.BuildState);
-        Player.StateMachine.SetState(Player.BuildState);
+        StartCoroutine(BuildEnterSequence());
+        //CameraManager.Instance.FacePlayer();
+        //UIManager.Instance.StateMachine.SetState(UIManager.Instance.BuildState);
+        //_player.StateMachine.SetState(_player.BuildState);
     }
 
     void BuildExit()
@@ -62,29 +96,66 @@ public class GameManager : MonoBehaviour
         UIManager.Instance.BuildUI.gameObject.SetActive(false);
     }
 
-    public void AddCogs(int amount)
-    {
-        TotalCogs += amount;
-        GamePlayUI.Instance.UpdateTotalCogs(TotalCogs);
-    }
-
     public void InstallGun(GunSlot slot, GunDefinition gun)
     {
         slot.InstallGun(gun);
-        Player.Cogs.Spend(gun.Levels[0].Cost);
+        _player.Cogs.Spend(gun.Levels[0].Cost);
     }
 
     public void UpgradeGun(GunSlot slot)
     {
         bool upgraded = slot.UpgradeGun();
         if (!upgraded) return;
-        Player.Cogs.Spend(slot.CurrentGun.Definition.Levels[slot.CurrentGun.Level].Cost);
+        _player.Cogs.Spend(slot.CurrentGun.Definition.Levels[slot.CurrentGun.Level].Cost);
     }
 
-    public void SetPlayer(PlayerController player)
+    public void StartGame()
     {
-        Player = player;
-        CameraManager.Instance.SetPlayer(player);
+        CurrentLevelIndex = 0;
+        _stateMachine.SetState(_warState);
+    }
+
+    public void LevelCompleted()
+    {
+#if UNITY_EDITOR
+        if (LevelEditorWindow.IsEditScene())
+        {
+            Debug.Log("Level Completed");
+            return;
+        }
+#endif
+        if(CurrentIsLastLevel)
+        {
+            Debug.Log("Game Completed");
+            return;
+        }
+        _stateMachine.SetState(_buildState);
+    }
+
+    public void GoNextLevel()
+    {
+        if (CurrentIsLastLevel) return;
+        CurrentLevelIndex++;
+        _stateMachine.SetState(_warState);
+    }
+
+    LevelDefinition CurrentLevel()
+    {
+#if UNITY_EDITOR
+        if (LevelEditorWindow.IsEditScene())
+        {
+            LevelDefinition level = LevelEditorWindow.SelectedLevel != null
+                ? LevelEditorWindow.SelectedLevel
+                : Levels[0];
+            return level;
+        }
+#endif
+        return Levels[CurrentLevelIndex];
+    }
+
+    public void LoadLevel()
+    {
+        LevelManager.Instance.LoadLevel(CurrentLevel());
     }
 
     public void GameOver()

@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -40,6 +41,7 @@ public class BuildUI : MonoBehaviour
         _selectedSlotUI = new GunSlotUIController(document);
 
         _doneButton = document.rootVisualElement.Q<Button>("DoneButton");
+        _doneButton.clicked += DoneButton;
 
         _selectedSlotUI.Show(false);
 
@@ -54,6 +56,12 @@ public class BuildUI : MonoBehaviour
     private void Update()
     {
         StateMachine.Update();
+    }
+
+    async void DoneButton()
+    {
+        await Task.Delay(100);
+        GameManager.Instance.GoNextLevel();
     }
 
     void PlayerBuildEnter()

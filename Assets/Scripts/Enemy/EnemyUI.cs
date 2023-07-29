@@ -6,19 +6,20 @@ using UnityEngine.UI;
 
 public class EnemyUI : MonoBehaviour
 {
+    Camera _cam;
     float _healthPercent = 1;
     [SerializeField] Slider _healthSlider;
     Tween _tween;
 
     void Start()
     {
-        
+        _cam = Camera.main;
     }
 
     void Update()
     {
         //transform.LookAt(GameCamera.Instance.Camera.transform);
-        transform.rotation = Quaternion.LookRotation(transform.position - CameraManager.Instance.Camera.transform.position);
+        transform.rotation = Quaternion.LookRotation(transform.position - _cam.transform.position);
     }
 
     public void UpdateHealthBar(float healthPercent)

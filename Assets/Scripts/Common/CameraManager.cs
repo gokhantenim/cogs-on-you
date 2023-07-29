@@ -22,10 +22,6 @@ public class CameraManager : MonoBehaviour
         Instance = this;
         Camera = Camera.main;
 
-        CameraFollowPlayer.gameObject.SetActive(false);
-        CameraFollowUI.gameObject.SetActive(false);
-        CameraFollowUISlot.gameObject.SetActive(false);
-
         FollowPlayerState = new(
             enter: () => { CameraFollowPlayer.gameObject.SetActive(true); },
             exit: () => { CameraFollowPlayer.gameObject.SetActive(false); }
@@ -40,6 +36,11 @@ public class CameraManager : MonoBehaviour
             enter: () => { CameraFollowUISlot.gameObject.SetActive(true); },
             exit: () => { CameraFollowUISlot.gameObject.SetActive(false); }
         );
+
+        CameraFollowPlayer.gameObject.SetActive(false);
+        CameraFollowUI.gameObject.SetActive(false);
+        CameraFollowUISlot.gameObject.SetActive(false);
+        //Debug.Log("camera awake");
     }
 
     public void SetPlayer(PlayerController player)

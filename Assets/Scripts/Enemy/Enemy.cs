@@ -10,13 +10,14 @@ public class Enemy : MonoBehaviour
 
     [SerializeField] EnemyUI ui;
 
-    void Awake()
+    protected virtual void Awake()
     {
         _cogs = GetComponent<Cogs>();
     }
 
     public void Die()
     {
+        LevelManager.Instance.EnemyDied();
         Destroy(gameObject);
         if (_cogs == null) return;
         _cogs.Spill();

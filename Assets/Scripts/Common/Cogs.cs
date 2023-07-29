@@ -23,6 +23,11 @@ public class Cogs : MonoBehaviour
         Vector3 position = transform.position;
         while (TotalCogs > 0)
         {
+            if (!Application.isPlaying)
+            {
+                break;
+            }
+
             int cogAmount = Random.Range(pieceSize / 2, pieceSize);
             if (cogAmount > TotalCogs)
             {
