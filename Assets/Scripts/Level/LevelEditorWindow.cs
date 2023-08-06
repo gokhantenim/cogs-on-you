@@ -117,6 +117,7 @@ public class LevelEditorWindow : EditorWindow
         if(PlayerController.Instance != null)
         {
             SelectedLevel.PlayerStartPosition = PlayerController.Instance.transform.position;
+            SelectedLevel.PlayerStartRotation = PlayerController.Instance.transform.rotation.eulerAngles;
         }
 
         // Set level definition dirty so the changes will be written to disk

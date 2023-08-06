@@ -50,7 +50,9 @@ public class LevelManager : MonoBehaviour
         if(PlayerController.Instance != null)
         {
             Vector3 playerPosition = LoadedLevel.PlayerStartPosition != null ? LoadedLevel.PlayerStartPosition : Vector3.zero;
+            Vector3 playerRotation = LoadedLevel.PlayerStartRotation != null ? LoadedLevel.PlayerStartRotation : Vector3.zero;
             PlayerController.Instance.transform.position = playerPosition + FlyDistance();
+            PlayerController.Instance.transform.rotation = Quaternion.Euler(playerRotation);
         }
 
         InstantiateLevelObjects();
@@ -75,7 +77,7 @@ public class LevelManager : MonoBehaviour
     public void EnemyDied()
     {
         SetRemainingEnemies(_remainingEnemies-1);
-        if(_remainingEnemies == 0) GameManager.Instance.LevelCompleted();
+        if(_remainingEnemies <= 0) GameManager.Instance.LevelCompleted();
     }
 
     void InstantiateLevelObjects()
@@ -105,7 +107,19 @@ public class LevelManager : MonoBehaviour
         }
     }
 
-    void DestroyLevelObjects()
+    public void ClearLevel()
+    {
+        DestroyContainer();
+
+        // if exists any level object out of the container
+        LevelObject[] levelObjects = FindObjectsOfType<LevelObject>();
+        foreach (LevelObject levelObject in levelObjects)
+        {
+            Destroy(levelObject.gameObject);
+        }
+    }
+
+    void DestroyContainer()
     {
         Transform objectsContainerTransform = transform.Find(_objectsContainerName);
         if (objectsContainerTransform == null) return;
@@ -124,7 +138,7 @@ public class LevelManager : MonoBehaviour
 
     void ResetLevelObjects()
     {
-        DestroyLevelObjects();
+        ClearLevel();
         _objectsContainer = new GameObject();
         _objectsContainer.name = _objectsContainerName;
         _objectsContainer.transform.parent = transform;

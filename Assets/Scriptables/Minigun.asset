@@ -26,3 +26,8 @@ MonoBehaviour:
     MagazineCapacity: 16
     ReloadTime: 3
     Cost: 1500
+  - Damage: 120
+    FireRate: 13
+    MagazineCapacity: 20
+    ReloadTime: 2.5
+    Cost: 3000

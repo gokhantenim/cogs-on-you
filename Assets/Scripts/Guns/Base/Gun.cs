@@ -58,6 +58,7 @@ public class Gun : MonoBehaviour
 
     public void SetState(GunStates _state)
     {
+        state = _state;
         _stateMachine.SetState(_states[_state]);
     }
 

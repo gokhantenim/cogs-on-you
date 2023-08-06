@@ -11,11 +11,15 @@ public class CameraManager : MonoBehaviour
     public CinemachineVirtualCamera CameraFollowPlayer;
     public CinemachineVirtualCamera CameraFollowUI;
     public CinemachineVirtualCamera CameraFollowUISlot;
+    public CinemachineVirtualCamera CameraFollowDeath;
+    public CinemachineVirtualCamera CameraFollowHome;
 
     public StateMachine StateMachine = new();
     public State FollowPlayerState;
     public State FacePlayerState;
     public State FaceGunSlotState;
+    public State DeathState;
+    public State HomeState;
 
     void Awake()
     {
@@ -37,10 +41,21 @@ public class CameraManager : MonoBehaviour
             exit: () => { CameraFollowUISlot.gameObject.SetActive(false); }
         );
 
+        DeathState= new(
+            enter: () => { CameraFollowDeath.gameObject.SetActive(true); },
+            exit: () => { CameraFollowDeath.gameObject.SetActive(false); }
+        );
+
+        HomeState = new(
+            enter: () => { CameraFollowHome.gameObject.SetActive(true); },
+            exit: () => { CameraFollowHome.gameObject.SetActive(false); }
+        );
+
         CameraFollowPlayer.gameObject.SetActive(false);
         CameraFollowUI.gameObject.SetActive(false);
         CameraFollowUISlot.gameObject.SetActive(false);
-        //Debug.Log("camera awake");
+        CameraFollowDeath.gameObject.SetActive(false);
+        CameraFollowHome.gameObject.SetActive(false);
     }
 
     public void SetPlayer(PlayerController player)
@@ -53,6 +68,12 @@ public class CameraManager : MonoBehaviour
 
         CameraFollowUISlot.Follow = player.CameraSlotTarget;
         CameraFollowUISlot.LookAt = player.CameraSlotTarget;
+
+        CameraFollowDeath.Follow = player.CameraDeathTarget;
+        CameraFollowDeath.LookAt = player.CameraDeathTarget;
+
+        CameraFollowHome.Follow = player.CameraHomeTarget;
+        CameraFollowHome.LookAt = player.CameraHomeTarget;
     }
 
     public void FollowPlayer()

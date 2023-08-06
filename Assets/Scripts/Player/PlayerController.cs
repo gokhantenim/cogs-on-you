@@ -5,6 +5,9 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using System.Linq;
 using DG.Tweening;
+using UnityEngine.Animations.Rigging;
+using System.Threading.Tasks;
+using static UnityEditor.Experimental.GraphView.GraphView;
 
 [RequireComponent(typeof(Scanner))]
 [RequireComponent(typeof(Cogs))]
@@ -24,13 +27,18 @@ public class PlayerController : MonoBehaviour
         }
     }
     public StateMachine StateMachine = new();
+    public State HomeComingState;
+    public State HomeState;
     public State WarState;
     public State BuildState;
+    public State PauseState;
 
     public GunSlot[] slots = new GunSlot[] { };
     public Transform CameraFollowTarget;
     public Transform CameraFaceTarget;
     public Transform CameraSlotTarget;
+    public Transform CameraDeathTarget;
+    public Transform CameraHomeTarget;
     [SerializeField] SphereCollider _magnetCollider;
     float _magnetColliderRadius = 0;
 
@@ -39,7 +47,6 @@ public class PlayerController : MonoBehaviour
     Animator _animator;
     CharacterController _controller;
     float _speed = 10;
-    float _rotationY;
     public float Gravity = -15.0f;
     float _verticalVelocity = -2f;
     [SerializeField] LayerMask _groundLayers;
@@ -49,17 +56,25 @@ public class PlayerController : MonoBehaviour
     float _fallTimeoutDelta = 0;
     public float FallTimeout = 0.15f;
     public float FlyingDistance = 20;
+    public bool Jumping = false;
+    public float JumpHeight = 10;
     [SerializeField] float _footStepDelay = 0.5f;
     float _footStepTimeout = 0;
     [SerializeField] AudioClip _landingAudioClip;
     [SerializeField] AudioClip[] _footstepAudioClips;
     [SerializeField] [Range(0, 1)] public float _footstepAudioVolume = 0.5f;
+    Vector3 _horizontalMovement = Vector3.zero;
+    Vector3 _verticalMovement = Vector3.zero;
 
     void Awake()
     {
+        _animator = GetComponent<Animator>();
         _camera = Camera.main;
+        HomeState = new();
         WarState = new(WarEnter, WarExit, WarUpdate);
-        BuildState = new(BuildEnter);
+        BuildState = new(BuildEnter, BuildExit);
+        PauseState = new();
+        HomeComingState = new(HomeComingEnter, update: HomeComingUpdate);
     }
 
     private void OnDrawGizmos()
@@ -75,11 +90,8 @@ public class PlayerController : MonoBehaviour
         _magnetColliderRadius = _magnetCollider.radius;
         CameraManager.Instance.SetPlayer(this);
         Cogs = GetComponent<Cogs>();
-        _animator = GetComponent<Animator>();
+        
         _controller = GetComponent<CharacterController>();
-        //_controller.detectCollisions = false;
-        //Cursor.lockState = CursorLockMode.Locked;
-        _rotationY = transform.rotation.eulerAngles.y;
         _fallTimeoutDelta = FallTimeout;
         InstallSlots();
     }
@@ -87,21 +99,33 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //Debug.Log("Player Update");
         StateMachine.Update();
+    }
+
+    void HomeComingEnter()
+    {
+        transform.position = Vector3.zero + new Vector3(0, FlyingDistance / 2);
+        transform.rotation = Quaternion.identity;
+    }
+
+    void HomeComingUpdate()
+    {
+        GroundedCheck();
+        GravityCheck();
+        VerticalMovementCheck();
+        Move();
+
+        transform.RewritePosition(x:0, z:0);
+
+        if (_grounded)
+        {
+            StateMachine.SetState(HomeState);
+        }
     }
 
     void WarEnter()
     {
-        Debug.Log("Player War Enter");
-        _magnetCollider.radius = _magnetColliderRadius;
 
-        //Debug.Log("Player Position before");
-        //Vector3 playerPosition = LevelManager.Instance.LoadedLevel.PlayerStartPosition != null 
-        //    ? LevelManager.Instance.LoadedLevel.PlayerStartPosition 
-        //    : Vector3.zero;
-        //transform.position = playerPosition + new Vector3(0, 20);
-        //Debug.Log("Player Position after");
     }
 
     void WarUpdate()
@@ -109,12 +133,15 @@ public class PlayerController : MonoBehaviour
         Rotate();
         GroundedCheck();
         GravityCheck();
+        HorizontalMovementCheck();
+        VerticalMovementCheck();
         Move();
+        WalkAnimation(InputManager.Instance.Move.x, InputManager.Instance.Move.z);
+        FootStepSound();
     }
 
     void WarExit()
     {
-        _magnetCollider.radius = 1000;
         WalkAnimation(0, 0);
         foreach (GunSlot slot in slots)
         {
@@ -122,13 +149,24 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    public void JumpAnimation()
+    {
+        _animator.SetTrigger("jump");
+    }
+
     void BuildEnter()
     {
+        _magnetCollider.radius = 1000;
         foreach (GunSlot slot in slots)
         {
             slot.SetTargetToIdle();
             slot.SetTarget(null);
         }
+    }
+
+    void BuildExit()
+    {
+        _magnetCollider.radius = _magnetColliderRadius;
     }
 
     public void OnHealthChange(float healthPercent)
@@ -149,7 +187,7 @@ public class PlayerController : MonoBehaviour
 
     public void Die()
     {
-        GameManager.Instance.GameOver();
+        GameManager.Instance.GameOver(success:false);
         Cogs.Spill();
         Destroy(gameObject);
     }
@@ -165,29 +203,38 @@ public class PlayerController : MonoBehaviour
 
     public void Rotate()
     {
-        if (InputManager.Instance.look == Vector2.zero) return;
-
-        _rotationY += InputManager.Instance.look.x;
-        transform.rotation = Quaternion.Euler(0, _rotationY, 0);
+        if (InputManager.Instance.Look == Vector2.zero) return;
+        transform.rotation = Quaternion.Euler(0,
+            transform.rotation.eulerAngles.y + InputManager.Instance.Look.x
+            , 0);
     }
 
-    Vector3 horizontalDirection()
+    void HorizontalMovementCheck()
     {
-        if (InputManager.Instance.move == Vector3.zero)
+        if (InputManager.Instance.Move == Vector3.zero)
+        {
+            _horizontalMovement = Vector3.zero;
+            return;
+        }
+
+        float inputDirection = Mathf.Atan2(InputManager.Instance.Move.x, InputManager.Instance.Move.z) * Mathf.Rad2Deg;
+        Vector3 targetDirection = Quaternion.Euler(0, inputDirection, 0) * transform.forward;
+        _horizontalMovement = _speed * Time.deltaTime * targetDirection;
+    }
+
+    void FootStepSound()
+    {
+        if (InputManager.Instance.Move == Vector3.zero)
         {
             _footStepTimeout = 0;
-            return Vector3.zero;
+            return;
         }
         _footStepTimeout -= Time.deltaTime;
-        if(_footStepTimeout <= 0)
+        if (_footStepTimeout <= 0)
         {
             PlayFootstepSound();
             _footStepTimeout += _footStepDelay;
         }
-
-        float inputDirection = Mathf.Atan2(InputManager.Instance.move.x, InputManager.Instance.move.z) * Mathf.Rad2Deg;
-        Vector3 targetDirection = Quaternion.Euler(0, inputDirection, 0) * transform.forward;
-        return targetDirection;
     }
 
     public void WalkAnimation(float x, float z)
@@ -198,10 +245,7 @@ public class PlayerController : MonoBehaviour
 
     public void Move()
     {
-        WalkAnimation(InputManager.Instance.move.x, InputManager.Instance.move.z);
-
-        Vector3 verticalDirection = new Vector3(0, _verticalVelocity, 0) * Time.deltaTime;
-        _controller.Move((_speed * Time.deltaTime * horizontalDirection()) + verticalDirection);
+        _controller.Move(_horizontalMovement + _verticalMovement);
     }
 
     private void GroundedCheck()
@@ -218,12 +262,20 @@ public class PlayerController : MonoBehaviour
     {
         if (_grounded)
         {
+            if (Jumping)
+            {
+                _verticalVelocity = Mathf.Sqrt(JumpHeight * -2 * Gravity);
+                return;
+            }
+
             _fallTimeoutDelta = FallTimeout;
             _verticalVelocity = -5f;
             _animator.SetBool("free_fall", false);
         }
         else
         {
+            Jumping = false;
+
             if(_fallTimeoutDelta > 0)
             {
                 _fallTimeoutDelta -= Time.deltaTime;
@@ -233,7 +285,11 @@ public class PlayerController : MonoBehaviour
                 _verticalVelocity += Gravity * 4 * Time.deltaTime;
             }
         }
+    }
 
+    void VerticalMovementCheck()
+    {
+        _verticalMovement = new Vector3(0, _verticalVelocity, 0) * Time.deltaTime;
     }
 
     public void SetTargets(List<Enemy> enemies) 
@@ -257,13 +313,32 @@ public class PlayerController : MonoBehaviour
         AudioSource.PlayClipAtPoint(_landingAudioClip, _camera.transform.position, _footstepAudioVolume);
     }
 
-    public void OnJumpCompleted()
+    public void OnPressJump()
     {
-        transform.DOMoveY(transform.position.y + FlyingDistance, 1);
+        if (!StateMachine.IsState(WarState) || !_grounded) return;
+        _animator.SetTrigger("jump");
     }
 
-    internal void Fly()
+    public void OnJumpAnimCompleted()
     {
-        _animator.SetTrigger("jump");
+        if (StateMachine.IsState(WarState))
+        {
+            Jumping = true;
+            return;
+        }
+
+        if (StateMachine.IsState(BuildState) || StateMachine.IsState(HomeState))
+        {
+            transform.DOMoveY(transform.position.y + FlyingDistance, 1);
+        }
+    }
+
+    public void ResetPlayer()
+    {
+        InstallSlots();
+        Damagable damagable = GetComponent<Damagable>();
+        damagable.ResetHealth();
+        Cogs cogs = GetComponent<Cogs>();
+        cogs.TotalCogs = 0;
     }
 }

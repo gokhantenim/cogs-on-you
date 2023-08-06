@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
+using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class UIManager : MonoBehaviour
 {
@@ -10,9 +11,14 @@ public class UIManager : MonoBehaviour
     public GamePlayUI GamePlayUI;
     public GameObject HomeUI;
 
+    public ModalView Modal;
+
     public StateMachine StateMachine = new();
+    public State HomeTransitionState;
     public State HomeState;
     public State GamePlayState;
+    public State GameOverState;
+    public State GamePauseState;
     public State BuildState;
 
     void Awake()
@@ -22,37 +28,61 @@ public class UIManager : MonoBehaviour
         GamePlayUI.gameObject.SetActive(false);
         HomeUI.gameObject.SetActive(false);
 
+        HomeTransitionState = new();
         HomeState = new(
                 enter: () => { HomeUI.gameObject.SetActive(true); },
                 exit: () => { HomeUI.gameObject.SetActive(false); }
             );
-        GamePlayState = new(GamePlayEnter, GamePlayExit);
-        BuildState = new(BuildEnter, BuildExit);
+        GamePlayState = new(
+                enter: () => { GamePlayUI.gameObject.SetActive(true); },
+                exit: () => { GamePlayUI.gameObject.SetActive(false); }
+            );
+        GameOverState = new(
+                exit: () => { Modal.Hide(); }
+            );
+        GamePauseState = new(
+                enter: () => { Modal.Show(Modal.PauseModalView); },
+                exit: () => { Modal.Hide(); }
+            );
+        BuildState = new(
+                enter: () => { BuildUI.gameObject.SetActive(true); },
+                exit: () => { BuildUI.gameObject.SetActive(false); }
+            );
     }
 
-    #region states
-    void GamePlayEnter()
+    public void StartGameButton()
     {
-        GamePlayUI.gameObject.SetActive(true);
+        GameManager.Instance.FlyToStartGame();
     }
-    void GamePlayExit()
-    {
-        GamePlayUI.gameObject.SetActive(false);
-    }
-    void BuildEnter()
-    {
-        BuildUI.gameObject.SetActive(true);
-        BuildUI.StateMachine.SetState(BuildUI.PlayerBuildState);
-    }
-    void BuildExit()
-    {
-        BuildUI.gameObject.SetActive(false);
-    }
-    #endregion
 
-    public async void StartGameButton()
+    public async void RestartGameButton()
     {
         await Task.Delay(100);
         GameManager.Instance.StartGame();
+    }
+
+    public async void HomeButton()
+    {
+        await Task.Delay(100);
+        GameManager.Instance.GoHome();
+    }
+
+    public void PauseButton()
+    {
+        GameManager.Instance.PauseGame();
+    }
+
+    public void ContinueButton()
+    {
+        GameManager.Instance.ContinueGame();
+    }
+
+    public void GameOver(bool success=true)
+    {
+        StateMachine.SetState(GameOverState);
+        Modal.Show(success 
+            ? Modal.SuccessModalView
+            : Modal.FailureModalView
+            );
     }
 }

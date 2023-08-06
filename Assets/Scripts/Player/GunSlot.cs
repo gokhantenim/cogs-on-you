@@ -27,6 +27,11 @@ public class GunSlot : MonoBehaviour
         _ikTarget.transform.rotation = Quaternion.LookRotation(TargetDirection(), Vector3.up);
     }
 
+    public void SetRigWeight(float weight)
+    {
+        _rig.weight = weight;
+    }
+
     public void SetTargetToIdle()
     {
         if (_rig == null) return;

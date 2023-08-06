@@ -8,6 +8,7 @@ using UnityEngine.UIElements;
 public class BuildUI : MonoBehaviour
 {
     public StateMachine StateMachine = new();
+    public State DisabledState;
     public State PlayerBuildState;
     public State GunSlotBuildState;
 
@@ -32,11 +33,16 @@ public class BuildUI : MonoBehaviour
     void Awake()
     {
         Instance = this;
+        DisabledState = new();
         PlayerBuildState = new(PlayerBuildEnter, PlayerBuildExit, PlayerBuildUpdate);
         GunSlotBuildState = new(GunSlotBuildEnter, GunSlotBuildExit);
+
         _camera = Camera.main;
         document = GetComponent<UIDocument>();
+    }
 
+    private void OnEnable()
+    {
         _slotsUI = new GunSlotsUIController(document, _camera);
         _selectedSlotUI = new GunSlotUIController(document);
 
@@ -45,6 +51,7 @@ public class BuildUI : MonoBehaviour
 
         _selectedSlotUI.Show(false);
 
+        StateMachine.SetState(PlayerBuildState);
     }
 
     //void OnDisable()
@@ -61,6 +68,7 @@ public class BuildUI : MonoBehaviour
     async void DoneButton()
     {
         await Task.Delay(100);
+        StateMachine.SetState(DisabledState);
         GameManager.Instance.GoNextLevel();
     }
 
@@ -92,6 +100,8 @@ public class BuildUI : MonoBehaviour
     void GunSlotBuildExit()
     {
         _selectedSlotUI.Show(false);
+        if (SelectedSlot == null) return;
+        SelectedSlot.Back2Normal();
     }
     
     public void SelectSlot(GunSlot slot)
@@ -114,19 +124,20 @@ public class BuildUI : MonoBehaviour
 
     public void BackFromSlot()
     {
-        SelectedSlot.Back2Normal();
         StateMachine.SetState(PlayerBuildState);
     }
 
     public void InstallGun()
     {
         GameManager.Instance.InstallGun(SelectedSlot, _selectedGun);
-        BackFromSlot();
+        _selectedSlotUI.SetSelectedGun(new GunSelectionItem(_selectedGun, SelectedSlot.CurrentGun));
+        //BackFromSlot();
     }
 
     public void UpgradeGun()
     {
         GameManager.Instance.UpgradeGun(SelectedSlot);
-        BackFromSlot();
+        _selectedSlotUI.SetSelectedGun(new GunSelectionItem(_selectedGun, SelectedSlot.CurrentGun));
+        //BackFromSlot();
     }
 }

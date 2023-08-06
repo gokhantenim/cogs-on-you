@@ -60,4 +60,13 @@ public class Cogs : MonoBehaviour
     {
         _totalCogs -= amount;
     }
+
+    public static void ClearAllCogs()
+    {
+        Cog[] cogs = FindObjectsOfType<Cog>();
+        foreach (Cog cog in cogs)
+        {
+            Destroy(cog.gameObject);
+        }
+    }
 }

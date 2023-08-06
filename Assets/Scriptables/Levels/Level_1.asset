@@ -14,25 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PlayerStartPosition: {x: 20.96, y: 7.12, z: 0.52}
   LevelObjects:
-  - ObjectPrefab: {fileID: 3667743124799837988, guid: 0faa06c49c294414da743f18c551644d,
+  - ObjectPrefab: {fileID: 8924170145835402666, guid: 8a7437817844dce4894b049de73b75f2,
       type: 3}
     Position: {x: 0, y: 0, z: 0}
-    EulerAngles: {x: 0.000002504482, y: 90, z: 0}
-    Scale: {x: 14.057735, y: 14.057701, z: 14.057735}
-    Health: 0
-    TotalCogs: 0
-  - ObjectPrefab: {fileID: 2664529523893104220, guid: 1b8bae3a784ce4f44acbee231a548b1c,
-      type: 3}
-    Position: {x: -20.6, y: 1.9, z: 1.1}
-    EulerAngles: {x: -0, y: 0, z: 0}
-    Scale: {x: 1, y: 1, z: 1}
-    Health: 3000
-    TotalCogs: 3000
-  - ObjectPrefab: {fileID: 7561066613761435406, guid: 50a0925b0c22af146a2d15615f815a1c,
-      type: 3}
-    Position: {x: 13.53, y: 3.56, z: 0.32}
-    EulerAngles: {x: 0, y: 270, z: 0}
-    Scale: {x: 1.6806045, y: 1.6856419, z: 1.6427577}
+    EulerAngles: {x: 0.000002504478, y: -0, z: -0}
+    Scale: {x: 2.591, y: 2.591, z: 2.591}
     Health: 0
     TotalCogs: 0
   - ObjectPrefab: {fileID: 899428459418414007, guid: e5f4daf24146ee040b5a2d7a73b30aa0,
@@ -42,10 +28,31 @@ MonoBehaviour:
     Scale: {x: 3.5660076, y: 8.561164, z: 4.248542}
     Health: 0
     TotalCogs: 0
-  - ObjectPrefab: {fileID: 8924170145835402666, guid: 8a7437817844dce4894b049de73b75f2,
+  - ObjectPrefab: {fileID: 7561066613761435406, guid: 50a0925b0c22af146a2d15615f815a1c,
       type: 3}
-    Position: {x: 0, y: 0, z: 0}
-    EulerAngles: {x: 0.000002504478, y: -0, z: -0}
-    Scale: {x: 2.591, y: 2.591, z: 2.591}
+    Position: {x: 13.53, y: 3.56, z: 0.32}
+    EulerAngles: {x: 0, y: 270, z: 0}
+    Scale: {x: 1.6806059, y: 1.6856419, z: 1.6427591}
     Health: 0
     TotalCogs: 0
+  - ObjectPrefab: {fileID: 2664529523893104220, guid: 1b8bae3a784ce4f44acbee231a548b1c,
+      type: 3}
+    Position: {x: -20.6, y: 1.9, z: 1.1}
+    EulerAngles: {x: -0, y: 0, z: 0}
+    Scale: {x: 1, y: 1, z: 1}
+    Health: 3000
+    TotalCogs: 3000
+  - ObjectPrefab: {fileID: 3667743124799837988, guid: 0faa06c49c294414da743f18c551644d,
+      type: 3}
+    Position: {x: 0, y: 0, z: 0}
+    EulerAngles: {x: 0.0000025044835, y: 90, z: 0}
+    Scale: {x: 14.057747, y: 14.057701, z: 14.057747}
+    Health: 0
+    TotalCogs: 0
+  - ObjectPrefab: {fileID: 2865675352857079213, guid: f985dc17c37157a4b96d1ae4a2b5aaf4,
+      type: 3}
+    Position: {x: 14.73, y: 6.64, z: -0.31}
+    EulerAngles: {x: -0, y: 73.14255, z: -0}
+    Scale: {x: 1.0000002, y: 1, z: 1.0000002}
+    Health: 15000
+    TotalCogs: 15000

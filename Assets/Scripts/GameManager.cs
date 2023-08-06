@@ -8,14 +8,21 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
     public List<GunDefinition> Guns;
+    [SerializeField] GameObject _homeScene;
     public GameObject CogPrefab;
+    public GameObject PlayerPrefab;
     public List<LevelDefinition> Levels;
     public int CurrentLevelIndex = 0;
-    bool CurrentIsLastLevel => CurrentLevelIndex+1 >= Levels.Count;
+    bool _currentIsLastLevel => CurrentLevelIndex+1 >= Levels.Count;
     StateMachine _stateMachine = new();
     State _homeState;
     State _warState;
     State _buildState;
+    State _pauseState;
+    State _gameOverState;
+
+    State _lastState; // for backup current state when getting pause
+
 
     PlayerController _player => PlayerController.Instance;
 
@@ -23,8 +30,10 @@ public class GameManager : MonoBehaviour
     {
         Instance = this;
         _homeState = new(HomeEnter, HomeExit);
-        _warState = new(WarEnter, WarExit);
-        _buildState = new(BuildEnter, BuildExit);
+        _warState = new(WarEnter);
+        _buildState = new(BuildEnter);
+        _gameOverState = new();
+        _pauseState = new(PauseEnter, PauseExit);
     }
 
     void Start()
@@ -32,7 +41,7 @@ public class GameManager : MonoBehaviour
 #if UNITY_EDITOR
         if (LevelEditorWindow.IsEditScene())
         {
-            _stateMachine.SetState(_warState);
+            StartLevel();
             return;
         }
 #endif
@@ -42,58 +51,69 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //_stateMachine.Update();
+
     }
 
     void HomeEnter()
     {
-        UIManager.Instance.HomeUI.SetActive(true);
+        UIManager.Instance.StateMachine.SetState(UIManager.Instance.HomeState);
+        PlayerController.Instance.StateMachine.SetState(PlayerController.Instance.HomeComingState);
+        CameraManager.Instance.StateMachine.SetState(CameraManager.Instance.HomeState);
+        _homeScene.SetActive(true);
     }
 
     void HomeExit()
     {
-        UIManager.Instance.HomeUI.SetActive(false);
+        _homeScene.SetActive(false);
     }
 
     void WarEnter()
     {
-        Debug.Log("Game War Enter");
-        LoadLevel();
-        UIManager.Instance.GamePlayUI.gameObject.SetActive(true);
+        UIManager.Instance.StateMachine.SetState(UIManager.Instance.GamePlayState);
         CameraManager.Instance.FollowPlayer();
+        if (_player == null) return;
         _player.StateMachine.SetState(_player.WarState);
     }
 
-    void WarExit()
-    {
-        UIManager.Instance.GamePlayUI.gameObject.SetActive(false);
-    }
-
-    IEnumerator BuildEnterSequence()
+    IEnumerator GoToBuildFromWar()
     {
         // 1 -  set player state build and fly
-        _player.StateMachine.SetState(_player.BuildState);
-        _player.Fly();
+        _stateMachine.SetState(_buildState);
+        _player.JumpAnimation();
         yield return new WaitForSeconds(1);
         // 2 - face cam
         CameraManager.Instance.FacePlayer();
         // 3 - show ui
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(1);
         UIManager.Instance.StateMachine.SetState(UIManager.Instance.BuildState);
         yield return null;
     }
 
     void BuildEnter()
     {
-        StartCoroutine(BuildEnterSequence());
-        //CameraManager.Instance.FacePlayer();
-        //UIManager.Instance.StateMachine.SetState(UIManager.Instance.BuildState);
-        //_player.StateMachine.SetState(_player.BuildState);
+        _player.StateMachine.SetState(_player.BuildState);
     }
 
-    void BuildExit()
+    void PauseEnter()
     {
-        UIManager.Instance.BuildUI.gameObject.SetActive(false);
+        UIManager.Instance.StateMachine.SetState(UIManager.Instance.GamePauseState);
+        _player.StateMachine.SetState(_player.PauseState);
+        Time.timeScale = 0;
+    }
+
+    void PauseExit()
+    {
+        UIManager.Instance.Modal.Hide();
+        Time.timeScale = 1;
+    }
+    public void PauseGame()
+    {
+        _lastState = _stateMachine.CurrentState;
+        _stateMachine.SetState(_pauseState);
+    }
+    public void ContinueGame()
+    {
+        _stateMachine.SetState(_lastState);
     }
 
     public void InstallGun(GunSlot slot, GunDefinition gun)
@@ -109,12 +129,6 @@ public class GameManager : MonoBehaviour
         _player.Cogs.Spend(slot.CurrentGun.Definition.Levels[slot.CurrentGun.Level].Cost);
     }
 
-    public void StartGame()
-    {
-        CurrentLevelIndex = 0;
-        _stateMachine.SetState(_warState);
-    }
-
     public void LevelCompleted()
     {
 #if UNITY_EDITOR
@@ -124,19 +138,63 @@ public class GameManager : MonoBehaviour
             return;
         }
 #endif
-        if(CurrentIsLastLevel)
+        if(_currentIsLastLevel)
         {
-            Debug.Log("Game Completed");
+            GameOver(true);
             return;
         }
-        _stateMachine.SetState(_buildState);
+        StartCoroutine(GoToBuildFromWar());
     }
 
     public void GoNextLevel()
     {
-        if (CurrentIsLastLevel) return;
-        CurrentLevelIndex++;
+        if (_currentIsLastLevel) return;
+        StartLevel(CurrentLevelIndex+1);
+    }
+
+    public void StartGame()
+    {
+        ResetPlayer();
+        GamePlayUI.Instance.ResetValues();
+        Cogs.ClearAllCogs();
+        StartLevel();
+    }
+
+    void ResetPlayer()
+    {
+        if (_player == null)
+        {
+            Instantiate(PlayerPrefab);
+        }
+        else
+        {
+            _player.ResetPlayer();
+        }
+    }
+
+    public async void FlyToStartGame()
+    {
+        UIManager.Instance.StateMachine.SetState(UIManager.Instance.HomeTransitionState);
+        PlayerController.Instance.JumpAnimation();
+        await Task.Delay(1300);// wait for the flying
+        StartGame();
+    }
+
+    public void StartLevel(int LevelIndex=0)
+    {
+        CurrentLevelIndex = LevelIndex;
+        GamePlayUI.Instance.SetLevelNo(CurrentLevelIndex + 1, Levels.Count);
+        LevelManager.Instance.LoadLevel(CurrentLevel());
         _stateMachine.SetState(_warState);
+    }
+
+    public void GoHome()
+    {
+        StopAllCoroutines();
+        ResetPlayer();
+        _stateMachine.SetState(_homeState);
+        Cogs.ClearAllCogs();
+        LevelManager.Instance.ClearLevel();
     }
 
     LevelDefinition CurrentLevel()
@@ -153,13 +211,11 @@ public class GameManager : MonoBehaviour
         return Levels[CurrentLevelIndex];
     }
 
-    public void LoadLevel()
+    public void GameOver(bool success)
     {
-        LevelManager.Instance.LoadLevel(CurrentLevel());
-    }
-
-    public void GameOver()
-    {
-        Debug.Log("game over");
+        _stateMachine.SetState(_gameOverState);
+        UIManager.Instance.GameOver(success);
+        if (success) return;
+        CameraManager.Instance.StateMachine.SetState(CameraManager.Instance.DeathState);
     }
 }

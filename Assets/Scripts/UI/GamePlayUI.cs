@@ -4,6 +4,7 @@ using UnityEngine;
 using DG.Tweening;
 using TMPro;
 using UnityEngine.UI;
+using static UnityEngine.Rendering.DebugUI;
 
 public class GamePlayUI : MonoBehaviour
 {
@@ -25,26 +26,28 @@ public class GamePlayUI : MonoBehaviour
     [SerializeField] TextMeshProUGUI _healthPercentText;
     [SerializeField] TextMeshProUGUI _totalCogsText;
     [SerializeField] TextMeshProUGUI _totalEnemiesText;
+    [SerializeField] TextMeshProUGUI _levelNoText;
     float _textHealthPercent = 1;
     float _healthPercent = 1;
     Tween _whiteBarTween;
     Tween _healthTextTween;
     public int _totalCogs = 0;
 
-    void Awake()
+    public void JumpButton()
     {
-
-    }
-    void Start()
-    {
-        
+        InputManager.Instance.OnJump(null);
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    //public void UpdateHealthBarNoAnimation(float healthPercent)
+    //{
+    //    Vector3 whiteScale = _whiteBar.gameObject.transform.localScale;
+    //    Vector3 greenScale = _greenBar.gameObject.transform.localScale;
+    //    whiteScale.x = healthPercent;
+    //    greenScale.x = healthPercent;
+    //    _greenBar.gameObject.transform.localScale = greenScale;
+    //    _whiteBar.gameObject.transform.localScale = whiteScale;
+    //    _healthPercentText.text = (healthPercent * 100).ToString(healthPercent < 0.1f ? "N2" : "N0") + "%";
+    //}
 
     public void UpdateHealthBar(float healthPercent)
     {
@@ -63,17 +66,27 @@ public class GamePlayUI : MonoBehaviour
 
         _healthTextTween = DOTween.To((value) => {
             _textHealthPercent = value;
-            _healthPercentText.text = (value * 100).ToString(value < 0.1f ? "N2" : "N0") + "%";
+            SetHealthPercentText(value);
         }, _textHealthPercent, healthPercent, 0.5f);
 
         _healthPercent = healthPercent;
+    }
+
+    void SetHealthPercentText(float value)
+    {
+        _healthPercentText.text = (value * 100).ToString(value < 0.1f ? "N2" : "N0") + "%";
+    }
+
+    void SetTotalCogsText(float value)
+    {
+        _totalCogsText.text = value.ToString("N0");
     }
 
     public void UpdateTotalCogs(int totalCogs)
     {
         DOTween.To((val) =>
         {
-            _totalCogsText.text = val.ToString("N0");
+            SetTotalCogsText(val);
         }, _totalCogs, totalCogs, 1).SetId("total-cogs");
         _totalCogs = totalCogs;
     }
@@ -81,5 +94,19 @@ public class GamePlayUI : MonoBehaviour
     public void SetEnemyCounts(int remainEnemies, int totalEnemies)
     {
         _totalEnemiesText.text = remainEnemies.ToString() + " / " + totalEnemies.ToString();
+    }
+
+    public void SetLevelNo(int currentLevel, int totalLevel)
+    {
+        _levelNoText.text = currentLevel.ToString() + " / " + totalLevel.ToString();
+    }
+
+    public void ResetValues()
+    {
+        SetEnemyCounts(0, 0);
+        SetTotalCogsText(0);
+        SetHealthPercentText(1);
+        _whiteBar.gameObject.transform.localScale = new Vector3(1, 1, 1);
+        _greenBar.gameObject.transform.localScale = new Vector3(1, 1, 1);
     }
 }

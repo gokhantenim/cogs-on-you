@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.InputSystem;
 
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
@@ -8,10 +9,23 @@ using UnityEngine.InputSystem;
 #endif
 public class InputManager : MonoBehaviour
 {
-	public static InputManager Instance;
+    public static InputManager _instance;
+    public static InputManager Instance
+    {
+        get
+        {
+            if (_instance == null)
+            {
+                _instance = FindObjectOfType<InputManager>(true);
+            }
+            return _instance;
+        }
+    }
+    PlayerController _player => PlayerController.Instance;
     [Header("Character Input Values")]
-    public Vector3 move;
-    public Vector2 look;
+    public Vector3 Move;
+    public Vector2 Look;
+	public UnityEvent Jump;
 
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
 	private PlayerInput _playerInput;
@@ -40,7 +54,6 @@ public class InputManager : MonoBehaviour
 	void Awake()
     {
 		Application.targetFrameRate = 60;
-		Instance = this;
 		_playerInput = GetComponent<PlayerInput>();
     }
 
@@ -58,11 +71,18 @@ public class InputManager : MonoBehaviour
 
 	public void MoveInput(Vector2 newMoveDirection)
 	{
-		move = new Vector3(newMoveDirection.x,0,newMoveDirection.y);
+		Move = new Vector3(newMoveDirection.x,0,newMoveDirection.y);
 	}
 
 	public void LookInput(Vector2 newLookDirection)
 	{
-		look = newLookDirection * DeltaMultiplier;
+		Look = newLookDirection * DeltaMultiplier;
 	}
+
+    public void OnJump(InputValue value)
+    {
+		//Jump?.Invoke();
+		if(_player == null) return;
+		_player.OnPressJump();
+    }
 }
