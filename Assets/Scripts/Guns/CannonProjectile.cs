@@ -17,11 +17,24 @@ public class CannonProjectile : MonoBehaviour
     private void Update()
     {
         _rigidbody.velocity = Velocity;
+
+        RaycastHit hit;
+        if (Physics.Raycast(transform.position, transform.forward * -1, out hit, 5))
+        {
+            Process(hit.collider);
+        }
     }
 
-    private void OnCollisionEnter(Collision collision)
+    private void OnTriggerEnter(Collider collision)
     {
-        //if (collision.gameObject.tag == "Player" || collision.gameObject.tag == "PlayerProjectile") return;
+        Process(collision);
+    }
+
+    void Process(Collider collision)
+    {
+        if (collision.gameObject.layer == LayerMask.NameToLayer("Player")) return;
+        if (collision.gameObject.layer == LayerMask.NameToLayer("Projectile")) return;
+
         if (collision.gameObject.tag == "Enemy")
         {
             try

@@ -1,0 +1,15 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:VisualElement name="Enhancement" class="gun-card-list-item" style="flex-direction: row; padding-left: 20px; padding-right: 20px; padding-top: 20px; padding-bottom: 20px; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0;">
+        <ui:VisualElement name="Image" style="flex-grow: 0; background-color: rgba(0, 0, 0, 0); width: 100px; background-image: url(&apos;project://database/Assets/Sprites/robot.png?fileID=21300000&amp;guid=af47b9d73eafbb148930e802264b7141&amp;type=3#robot&apos;); -unity-background-scale-mode: scale-to-fit; margin-left: 0; margin-right: 20px; margin-top: 0; margin-bottom: 0;" />
+        <ui:VisualElement name="Data" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0);">
+            <ui:VisualElement name="Name" class="property-border-color" style="border-bottom-width: 1px; flex-direction: row;">
+                <ui:Label text="Name" display-tooltip-when-elided="true" name="Name" style="margin-left: 0; margin-top: 0; font-size: 35px; -unity-font-style: bold; color: rgb(197, 197, 197); border-bottom-width: 0; width: 291px; padding-left: 20px;" />
+            </ui:VisualElement>
+            <ui:VisualElement name="CostRow" class="property-border-color" style="border-bottom-width: 0; flex-direction: row; justify-content: space-between;">
+                <ui:Label text="Cost" display-tooltip-when-elided="true" name="CostLabel" style="margin-left: 0; margin-top: 0; font-size: 35px; -unity-font-style: bold; color: rgb(197, 197, 197); width: 60%; padding-left: 20px;" />
+                <ui:Label text="0" display-tooltip-when-elided="true" name="Cost" style="margin-left: 0; margin-top: 0; font-size: 35px; -unity-font-style: bold; color: rgb(255, 224, 0); flex-grow: 1; border-left-width: 0; border-left-color: rgb(255, 255, 255); border-right-color: rgb(255, 255, 255); border-top-color: rgb(255, 255, 255); border-bottom-color: rgb(255, 255, 255); padding-left: 0; -unity-text-align: upper-right; padding-right: 20px;" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:Button text="BUY" display-tooltip-when-elided="true" name="BuyButton" style="margin-left: 20px; margin-right: 0; margin-top: 20px; margin-bottom: 0; padding-left: 50px; padding-right: 50px; padding-top: 20px; padding-bottom: 20px; font-size: 32px; overflow: hidden;" />
+    </ui:VisualElement>
+</ui:UXML>

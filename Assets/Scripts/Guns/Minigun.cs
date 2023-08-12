@@ -24,7 +24,7 @@ public class Minigun : Gun
         projectileGameobject.transform.rotation = Quaternion.LookRotation(targetDirection, Vector3.forward);
         MinigunProjectile projectile = projectileGameobject.GetComponent<MinigunProjectile>();
         projectile.gun = this;
-        projectile.Velocity = targetDirection.normalized * 75;
+        projectile.Velocity = targetDirection.normalized * 150;
         //Rigidbody bulletRigidbody = projectileGameobject.GetComponent<Rigidbody>();
         //bulletRigidbody.AddForce(targetDirection.normalized * 10000);
     }

@@ -97,6 +97,7 @@ GameObject:
   - component: {fileID: 1148773548192333075}
   - component: {fileID: 6286613758115802681}
   - component: {fileID: -8966364721345178736}
+  - component: {fileID: -4526756475161529478}
   m_Layer: 10
   m_Name: Dummy
   m_TagString: Enemy
@@ -232,6 +233,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b7ddefeb10aed14fb131c61c4698a61, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!208 &-4526756475161529478
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2664529523893104220}
+  m_Enabled: 0
+  serializedVersion: 3
+  m_Shape: 0
+  m_Extents: {x: 1.05, y: 2.185, z: 1.05}
+  m_MoveThreshold: 0.1
+  m_Carve: 0
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 0, z: 0}
+  m_TimeToStationary: 0.5
 --- !u!1001 &3457431251160092231
 PrefabInstance:
   m_ObjectHideFlags: 0

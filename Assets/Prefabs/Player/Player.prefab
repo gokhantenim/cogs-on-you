@@ -193,6 +193,7 @@ Transform:
   - {fileID: 8753311902928258743}
   - {fileID: 2765473639434074016}
   - {fileID: 7088015345563976127}
+  - {fileID: 5093312442721410471}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -216,12 +217,13 @@ MonoBehaviour:
   CameraSlotTarget: {fileID: 7194739249478199817}
   CameraDeathTarget: {fileID: 131355494706935659}
   CameraHomeTarget: {fileID: 8753311902928258743}
+  ShieldPosition: {fileID: 5093312442721410471}
   _magnetCollider: {fileID: 3883788879554344514}
   Cogs: {fileID: 5810600204494088799}
   Gravity: -15
   _groundLayers:
     serializedVersion: 2
-    m_Bits: 513
+    m_Bits: 1537
   FallTimeout: 0.25
   FlyingDistance: 20
   Jumping: 0
@@ -272,7 +274,7 @@ MonoBehaviour:
     m_Bits: 1024
   _ignoreLayers:
     serializedVersion: 2
-    m_Bits: 260
+    m_Bits: 6404
   _lookingTag: Enemy
   _drawGizmos: 0
   ScanPerSecond: 6
@@ -324,6 +326,7 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
   Health: 10000
+  Shield: {fileID: 0}
 --- !u!114 &5810600204494088799
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -439,7 +442,7 @@ CapsuleCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Radius: 0.7
   m_Height: 4.5
@@ -930,6 +933,37 @@ MonoBehaviour:
       position: {x: 0, y: 0, z: 0}
       rotation: {x: 0, y: 0, z: 0}
     m_Visible: 1
+--- !u!1 &4620788731140434459
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5093312442721410471}
+  m_Layer: 8
+  m_Name: ShieldPosition
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5093312442721410471
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4620788731140434459}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 2.87, z: -0.24}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1377454496584336415}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4633324940533594031
 GameObject:
   m_ObjectHideFlags: 0
@@ -1866,7 +1900,7 @@ PrefabInstance:
         type: 3}
       propertyPath: DefaultGun
       value: 
-      objectReference: {fileID: 11400000, guid: 1615ae4d9f8e45342906363277799c15,
+      objectReference: {fileID: 11400000, guid: 772458a23c22e0f4c8017de9293069d1,
         type: 2}
     - target: {fileID: 7424724059135623683, guid: 29ccf856dec83cd4785748de1e6c6eb8,
         type: 3}

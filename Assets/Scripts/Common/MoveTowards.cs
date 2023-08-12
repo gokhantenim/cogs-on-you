@@ -9,6 +9,7 @@ public class MoveTowards : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(to == null) return;
         transform.position = Vector3.MoveTowards(transform.position, to.position + new Vector3(0, 3), Time.deltaTime * 35);
     }
 }

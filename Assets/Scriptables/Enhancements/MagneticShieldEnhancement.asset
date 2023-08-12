@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 108b6f730fc1be2498ffe04b21bd76a5, type: 3}
+  m_Name: MagneticShieldEnhancement
+  m_EditorClassIdentifier: 
+  Name: Magnetic Shield
+  Cost: 1000
+  Image: {fileID: 21300000, guid: 15b0b2dc08647e641b0cccadf6f6ce80, type: 3}
+  ShieldPrefab: {fileID: 7258249418490661040, guid: 3cab98b271b0d524b84c3693ab66ac1a,
+    type: 3}

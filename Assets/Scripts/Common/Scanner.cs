@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
+//[ExecuteInEditMode]
 public class Scanner : MonoBehaviour
 {
     public UnityEvent<List<GameObject>> OnScan;
@@ -22,7 +23,6 @@ public class Scanner : MonoBehaviour
     List<GameObject> _seenEnemies = new List<GameObject>();
     int _seenCount = 0;
     
-
     private void OnDrawGizmos()
     {
         if (!_drawGizmos) return;
@@ -33,7 +33,8 @@ public class Scanner : MonoBehaviour
         Gizmos.color = Color.white;
         foreach (GameObject enemy in _seenEnemies)
         {
-            Gizmos.DrawLine(transform.position + new Vector3(0, 4f, 0), enemy.transform.position);
+            Collider collider = enemy.GetComponent<Collider>();
+            Gizmos.DrawLine(MyPosition(), collider.bounds.center);
         }
     }
 
@@ -59,7 +60,7 @@ public class Scanner : MonoBehaviour
         for (int i = 0; i < _seenCount; i++)
         {
             Collider seenCollider = _seenColliders[i];
-            if (seenCollider.tag == _lookingTag && InSight(seenCollider.gameObject))
+            if (seenCollider.tag == _lookingTag && InSight(seenCollider))
             {
                 _seenEnemies.Add(seenCollider.gameObject);
             }
@@ -67,15 +68,23 @@ public class Scanner : MonoBehaviour
         OnScan?.Invoke(_seenEnemies);
     }
 
-    bool InSight(GameObject seenObject)
+    Vector3 MyPosition()
     {
-        Vector3 direction = seenObject.transform.position - transform.position;
+        Collider myCollider = GetComponent<Collider>();
+        return myCollider != null ? myCollider.bounds.center : transform.position;
+    }
+
+    bool InSight(Collider seenObject)
+    {
+        
+        Vector3 direction = seenObject.transform.position.Rewrite(y:0) - transform.position.Rewrite(y:0);
         float angle = Vector3.Angle(direction, transform.forward);
         if (angle > _halfScanAngle) return false;
 
         RaycastHit hit;
-        if (Physics.Linecast(transform.position + new Vector3(0, 4f, 0), seenObject.transform.position, out hit, ~_ignoreLayers)
-            && hit.collider.gameObject.Equals(seenObject))
+        
+        if (Physics.Linecast(MyPosition(), seenObject.bounds.center, out hit, ~_ignoreLayers)
+            && hit.collider.Equals(seenObject))
         {
             return true;
         }

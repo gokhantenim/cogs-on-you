@@ -2,7 +2,7 @@
     <Style src="project://database/Assets/UI/style.uss?fileID=7433441132597879392&amp;guid=90816361cec1a5045956606cb10e1316&amp;type=3#style" />
     <ui:VisualElement name="Slots" style="width: auto; height: auto; position: absolute; left: 0; top: 0; right: 0; bottom: 0;" />
     <ui:Button text="Done" display-tooltip-when-elided="true" name="DoneButton" style="display: flex; font-size: 40px; width: auto; justify-content: flex-start; position: absolute; bottom: 0; left: 0; right: 0; height: 100px;" />
-    <ui:VisualElement name="SlotOperations" style="position: absolute; bottom: 100px; right: 0; left: 0; top: 40%;">
+    <ui:VisualElement name="SlotOperations" style="position: absolute; bottom: 100px; right: 0; left: 0; top: 40%; display: flex;">
         <ui:Button text="&lt; Back" display-tooltip-when-elided="true" name="BackButton" style="top: auto; display: flex; font-size: 40px; width: auto; -unity-text-align: middle-center; white-space: nowrap; overflow: hidden; flex-shrink: 0; height: 100px;" />
         <ui:VisualElement name="Operations" style="padding-left: 10px; padding-right: 10px; padding-top: 10px; padding-bottom: 10px; flex-grow: 1;">
             <ui:VisualElement name="SelectedGun" style="background-color: rgba(0, 0, 0, 0.92);">
@@ -49,4 +49,5 @@
             </ui:VisualElement>
         </ui:VisualElement>
     </ui:VisualElement>
+    <ui:ListView name="Enhancements" fixed-item-height="250" focusable="true" show-alternating-row-backgrounds="None" selection-type="None" class="guns-list" style="position: absolute; top: 60%; bottom: 100px; right: 0; left: 0;" />
 </ui:UXML>

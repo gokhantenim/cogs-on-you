@@ -13,7 +13,7 @@ public class SoldierBot : Enemy
     StateMachine _stateMachine = new();
     State _wanderState;
     State _chaseState;
-    State _aimState;
+    //State _aimState;
     State _attackState;
 
     NavMeshAgent _agent;
@@ -36,7 +36,7 @@ public class SoldierBot : Enemy
     {
         _wanderState = new(WanderEnter, WanderExit, Wander);
         _chaseState = new(ChaseEnter, ChaseExit, Chase);
-        _aimState = new(AimEnter, AimExit, Aim);
+        //_aimState = new(AimEnter, AimExit, Aim);
         _attackState = new(AttackEnter, AttackExit, Attack);
 
         _agent = GetComponent<NavMeshAgent>();
@@ -147,9 +147,9 @@ public class SoldierBot : Enemy
     void Chase()
     {
         SetAgentDestination(_lastKnownPosition);
-        if (CheckFacingWithPlayer(10))
+        if (CheckFacingWithPlayer(15))
         {
-            _stateMachine.SetState(_aimState);
+            _stateMachine.SetState(_attackState);
             return;
         }
     }
@@ -186,69 +186,71 @@ public class SoldierBot : Enemy
             .SetId(_armRigTweenId);
     }
 
-    void AimEnter()
-    {
-        SetArmRigWeight(1);
-        _lastAttackPosition = _lastKnownPosition;
-    }
+    //void AimEnter()
+    //{
+    //    SetArmRigWeight(1);
+    //    _lastAttackPosition = _lastKnownPosition;
+    //}
 
-    void AimExit()
-    {
-        SetArmRigWeight(0);
-    }
+    //void AimExit()
+    //{
+    //    SetArmRigWeight(0);
+    //}
 
-    void Aim()
-    {
-        if (!CheckFacingWithPlayer(45))
-        {
-            _stateMachine.SetState(_chaseState);
-            return;
-        }
+    //void Aim()
+    //{
+    //    if (!CheckFacingWithPlayer(45))
+    //    {
+    //        _stateMachine.SetState(_chaseState);
+    //        return;
+    //    }
 
-        Vector3 targetPosition = _lastKnownPosition + new Vector3(0, 2);
-        Vector3 setPosition = Vector3.Lerp(_gunTarget.position, targetPosition, Time.deltaTime * 4);
+    //    Vector3 targetPosition = _lastKnownPosition + new Vector3(0, 2);
+    //    Vector3 setPosition = Vector3.Lerp(_gunTarget.position, targetPosition, Time.deltaTime * 4);
 
-        _gunTarget.position = setPosition;
+    //    _gunTarget.position = setPosition;
 
-        float distance = Vector3.Distance(targetPosition, _gunTarget.position);
-        if (distance < 0.2f)
-        {
-            _stateMachine.SetState(_attackState);
-        }
-    }
+    //    float distance = Vector3.Distance(targetPosition, _gunTarget.position);
+    //    if (distance < 0.2f)
+    //    {
+    //        _stateMachine.SetState(_attackState);
+    //    }
+    //}
 
-    void LaserScale()
-    {
-        float robotScale = _animator.gameObject.transform.localScale.z;
-        float distance = Vector3.Distance(_gunFirePoint.transform.position, _gunLaserEnd.transform.position) / robotScale;
-        Vector3 laserSize = new Vector3(_initialLaserScale.x, distance / 2f, _initialLaserScale.z);
-        _gunLaser.transform.localScale = laserSize;
-        Vector3 middlePoint = (_gunFirePoint.transform.position + _gunLaserEnd.transform.position) / 2f;
-        _gunLaser.transform.position = middlePoint;
-        Vector3 rotationDirection = _gunLaserEnd.transform.position - _gunFirePoint.transform.position;
-        _gunLaser.transform.up = rotationDirection;
-    }
+    //void LaserScale()
+    //{
+    //    float robotScale = _animator.gameObject.transform.localScale.z;
+    //    float distance = Vector3.Distance(_gunFirePoint.transform.position, _gunLaserEnd.transform.position) / robotScale;
+    //    Vector3 laserSize = new Vector3(_initialLaserScale.x, distance / 2f, _initialLaserScale.z);
+    //    _gunLaser.transform.localScale = laserSize;
+    //    Vector3 middlePoint = (_gunFirePoint.transform.position + _gunLaserEnd.transform.position) / 2f;
+    //    _gunLaser.transform.position = middlePoint;
+    //    Vector3 rotationDirection = _gunLaserEnd.transform.position - _gunFirePoint.transform.position;
+    //    _gunLaser.transform.up = rotationDirection;
+    //}
 
     void AttackEnter()
     {
         SetArmRigWeight(1);
-        SetLaserAlpha(0.3f);
-        _gunLaserEnd.transform.position = _gunFirePoint.transform.position;
-        _gunLaser.SetActive(true);
-        _gunLaserEnd.transform.DOMove(_gunTarget.position, 0.5f)
-            .SetId(_laserScaleTweenId)
-            .OnUpdate(() =>
-            {
-                LaserScale();
-            })
-            .OnComplete(OnLaserReached);
+        _lastAttackPosition = _lastKnownPosition;
+        _attackCoroutine = StartCoroutine(AttackEnumerator());
+        //SetLaserAlpha(0.3f);
+        //_gunLaserEnd.transform.position = _gunFirePoint.transform.position;
+        //_gunLaser.SetActive(true);
+        //_gunLaserEnd.transform.DOMove(_gunTarget.position, 0.5f)
+        //    .SetId(_laserScaleTweenId)
+        //    .OnUpdate(() =>
+        //    {
+        //        LaserScale();
+        //    })
+        //    .OnComplete(OnLaserReached);
     }
 
     void AttackExit()
     {
         SetArmRigWeight(0);
-        _gunLaser.SetActive(false);
-        DOTween.Kill(_laserScaleTweenId);
+        //_gunLaser.SetActive(false);
+        //DOTween.Kill(_laserScaleTweenId);
         try
         {
             StopCoroutine(_attackCoroutine);
@@ -258,23 +260,34 @@ public class SoldierBot : Enemy
 
     void Attack()
     {
-        if(Vector3.Distance(_lastAttackPosition, _lastKnownPosition) > 0.2f)
+        if (!CheckFacingWithPlayer(45))
         {
-            _stateMachine.SetState(_aimState);
+            _stateMachine.SetState(_chaseState);
             return;
         }
+        if (Vector3.Distance(_lastAttackPosition, _lastKnownPosition) > 5)
+        {
+            _stateMachine.SetState(_chaseState);
+            return;
+        }
+
+        Vector3 targetPosition = _lastKnownPosition + new Vector3(0, 2);
+        Vector3 setPosition = Vector3.Lerp(_gunTarget.position, targetPosition, Time.deltaTime * 4);
+
+        _gunTarget.position = setPosition;
     }
 
     IEnumerator AttackEnumerator()
     {
-        for (int i = 0; i < 1; i++)
-        {
-            _gunLaser.SetActive(false);
-            yield return new WaitForSeconds(0.1f);
-            _gunLaser.SetActive(true);
-            yield return new WaitForSeconds(0.4f);
-        }
-        _gunLaser.SetActive(false);
+        //for (int i = 0; i < 1; i++)
+        //{
+        //    _gunLaser.SetActive(false);
+        //    yield return new WaitForSeconds(0.1f);
+        //    _gunLaser.SetActive(true);
+        //    yield return new WaitForSeconds(0.4f);
+        //}
+        //_gunLaser.SetActive(false);
+        yield return new WaitForSeconds(0.5f);
         Fire();
         yield return new WaitForSeconds(0.2f);
         Fire();
@@ -284,19 +297,19 @@ public class SoldierBot : Enemy
         AttackEnter();
     }
 
-    void SetLaserAlpha(float alpha)
-    {
-        MeshRenderer meshRenderer = _gunLaser.GetComponent<MeshRenderer>();
-        Color color = meshRenderer.material.color;
-        color.a = alpha;
-        meshRenderer.material.color = color;
-    }
+    //void SetLaserAlpha(float alpha)
+    //{
+    //    MeshRenderer meshRenderer = _gunLaser.GetComponent<MeshRenderer>();
+    //    Color color = meshRenderer.material.color;
+    //    color.a = alpha;
+    //    meshRenderer.material.color = color;
+    //}
 
-    void OnLaserReached()
-    {
-        //SetLaserAlpha(0.75f);
-        _attackCoroutine = StartCoroutine(AttackEnumerator());
-    }
+    //void OnLaserReached()
+    //{
+    //    //SetLaserAlpha(0.75f);
+    //    _attackCoroutine = StartCoroutine(AttackEnumerator());
+    //}
 
     void Fire()
     {

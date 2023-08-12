@@ -461,7 +461,7 @@ MonoBehaviour:
     m_Bits: 256
   _ignoreLayers:
     serializedVersion: 2
-    m_Bits: 1028
+    m_Bits: 6148
   _lookingTag: Player
   _drawGizmos: 0
   ScanPerSecond: 6

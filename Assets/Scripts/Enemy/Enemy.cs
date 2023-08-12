@@ -18,6 +18,7 @@ public class Enemy : MonoBehaviour
     public void Die()
     {
         LevelManager.Instance.EnemyDied();
+        Instantiate(GameManager.Instance.ExplosionPrefab, transform.position, Quaternion.identity);
         Destroy(gameObject);
         if (_cogs == null) return;
         _cogs.Spill();

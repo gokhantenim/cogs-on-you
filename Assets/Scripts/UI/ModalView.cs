@@ -1,13 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class ModalView : MonoBehaviour
 {
+    [SerializeField] GameObject _modalsContainer;
     public GameObject SuccessModalView;
     public GameObject FailureModalView;
     public GameObject PauseModalView;
     public GameObject SettingsModalView;
+    [SerializeField] GameObject _alertModalView;
+    [SerializeField] TextMeshProUGUI _alertMessageText;
 
     GameObject lastShowedView;
 
@@ -16,18 +20,29 @@ public class ModalView : MonoBehaviour
         HideLastView();
         lastShowedView = modalView;
         modalView.SetActive(true);
-        gameObject.SetActive(true);
+        _modalsContainer.SetActive(true);
     }
 
     public void Hide()
     {
         HideLastView();
-        gameObject.SetActive(false);
+        _modalsContainer.SetActive(false);
     }
 
     void HideLastView()
     {
         if (lastShowedView == null) return;
         lastShowedView.SetActive(false);
+    }
+
+    public void Alert(string message)
+    {
+        _alertMessageText.text = message;
+        _alertModalView.SetActive(true);
+    }
+
+    public void AlertOkButton()
+    {
+        _alertModalView.SetActive(false);
     }
 }

@@ -16,32 +16,30 @@ public class SoldierBotProjectile : MonoBehaviour
     private void Update()
     {
         _rigidbody.velocity = Velocity;
+
+        RaycastHit hit;
+        if (Physics.Raycast(transform.position, transform.forward * -1, out hit, 5))
+        {
+            Process(hit.collider);
+        }
     }
 
-    //private void OnTriggerEnter(Collider collision)
-    //{
-    //    Process(collision);
-    //}
-    private void OnCollisionEnter(Collision collision)
+    private void OnTriggerEnter(Collider collision)
     {
-        Process(collision.collider);
+        Process(collision);
     }
 
     void Process(Collider collider)
     {
-        //Debug.Log(collider.gameObject.tag);
-        if (collider.gameObject.tag == "Enemy" || collider.gameObject.tag == "PlayerProjectile") return;
+        //if (collider.gameObject.tag == "Enemy" || collider.gameObject.tag == "PlayerProjectile") return;
 
-        if (collider.gameObject.tag == "Player")
+        if (collider.gameObject.tag != "Player") return;
+        try
         {
-            try
-            {
-                Damagable damagable = collider.gameObject.GetComponent<Damagable>();
-                damagable.TakeDamage(250);
-            }
-            catch (NullReferenceException) { }
-
+            Damagable damagable = collider.gameObject.GetComponent<Damagable>();
+            damagable.TakeDamage(250);
         }
+        catch (NullReferenceException) { }
         Destroy(gameObject);
     }
 }

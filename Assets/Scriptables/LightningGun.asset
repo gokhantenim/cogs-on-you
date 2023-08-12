@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 96ca8f4304cf0ae418db51c68e101246, type: 3}
+  m_Name: LightningGun
+  m_EditorClassIdentifier: 
+  Name: Lightning Gun
+  GunPrefab: {fileID: 7991975295436015599, guid: ad463e4ee96d58d42b01bf9ce979ea15,
+    type: 3}
+  Levels:
+  - Damage: 25
+    FireRate: 10
+    MagazineCapacity: 15
+    ReloadTime: 3
+    Cost: 11500
+  - Damage: 35
+    FireRate: 12
+    MagazineCapacity: 16
+    ReloadTime: 3
+    Cost: 1500
+  - Damage: 50
+    FireRate: 13
+    MagazineCapacity: 20
+    ReloadTime: 2.5
+    Cost: 3000

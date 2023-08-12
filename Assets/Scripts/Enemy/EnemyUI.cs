@@ -8,12 +8,21 @@ public class EnemyUI : MonoBehaviour
 {
     Camera _cam;
     float _healthPercent = 1;
-    [SerializeField] Slider _healthSlider;
-    Tween _tween;
+    [SerializeField] Image _greenBar;
+    [SerializeField] Image _whiteBar;
+    Tween _whiteBarTween;
 
     void Start()
     {
         _cam = Camera.main;
+    }
+
+    void OnDestroy()
+    {
+        if (_whiteBarTween != null)
+        {
+            _whiteBarTween.Kill();
+        }
     }
 
     void Update()
@@ -24,12 +33,19 @@ public class EnemyUI : MonoBehaviour
 
     public void UpdateHealthBar(float healthPercent)
     {
-        _healthPercent = healthPercent;
-
-        if (_tween != null)
+        if (_whiteBarTween != null)
         {
-            _tween.Kill();
+            _whiteBarTween.Kill();
         }
-        _tween = _healthSlider.DOValue(_healthPercent, 0.5f);
+        Vector3 whiteScale = _whiteBar.gameObject.transform.localScale;
+        Vector3 greenScale = _greenBar.gameObject.transform.localScale;
+        greenScale.x = healthPercent;
+        _greenBar.gameObject.transform.localScale = greenScale;
+        _whiteBarTween = DOTween.To((value) => {
+            whiteScale.x = value;
+            _whiteBar.gameObject.transform.localScale = whiteScale;
+        }, whiteScale.x, healthPercent, 0.5f);
+
+        _healthPercent = healthPercent;
     }
 }

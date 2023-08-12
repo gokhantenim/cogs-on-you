@@ -10,17 +10,19 @@ public class Damagable : MonoBehaviour
     public UnityEvent<float> OnChangeHealth;
     public UnityEvent OnDead;
     public float Health = 0;
-    float _maxHealth = 0;
-    public float HealthPercent => Health / _maxHealth;
+    public MagneticShield Shield;
+    public float MaxHealth { get; private set; }
+    public float HealthPercent => Health / MaxHealth;
 
     void Awake()
     {
-        _maxHealth = Health;
+        MaxHealth = Health;
         OnChangeHealth?.Invoke(HealthPercent);
     }
 
     public virtual void TakeDamage(float damage)
     {
+        if (Shield != null && Shield.IsActive) return;
         if (Health <= 0) return;
         OnDamaged?.Invoke(damage);
         if (damage > Health)
@@ -37,9 +39,18 @@ public class Damagable : MonoBehaviour
         }
     }
 
+    public void SetHealth(float health, bool alsoMaxHealth=false)
+    {
+        Health = health;
+        if (alsoMaxHealth)
+        {
+            MaxHealth = health;
+        }
+        OnChangeHealth?.Invoke(HealthPercent);
+    }
+
     public void ResetHealth()
     {
-        Health = _maxHealth;
-        OnChangeHealth?.Invoke(HealthPercent);
+        SetHealth(MaxHealth);
     }
 }

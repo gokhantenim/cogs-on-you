@@ -16,7 +16,7 @@ public class Cannon : Gun
         bulletGameobject.transform.position = firePoint.position;
         CannonProjectile projectile = bulletGameobject.GetComponent<CannonProjectile>();
         projectile.gun = this;
-        projectile.Velocity = targetDirection.normalized * 50;
+        projectile.Velocity = targetDirection.normalized * 75;
         //Rigidbody bulletRigidbody = bulletGameobject.GetComponent<Rigidbody>();
         //bulletRigidbody.AddForce(targetDirection.normalized * 10000);
     }

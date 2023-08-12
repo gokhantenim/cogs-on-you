@@ -27,6 +27,7 @@ public class PlayerController : MonoBehaviour
         }
     }
     public StateMachine StateMachine = new();
+    public State TransitionState;
     public State HomeComingState;
     public State HomeState;
     public State WarState;
@@ -39,10 +40,12 @@ public class PlayerController : MonoBehaviour
     public Transform CameraSlotTarget;
     public Transform CameraDeathTarget;
     public Transform CameraHomeTarget;
+    public Transform ShieldPosition;
     [SerializeField] SphereCollider _magnetCollider;
     float _magnetColliderRadius = 0;
 
     public Cogs Cogs;
+    public Damagable Damagable;
     Camera _camera;
     Animator _animator;
     CharacterController _controller;
@@ -70,6 +73,7 @@ public class PlayerController : MonoBehaviour
     {
         _animator = GetComponent<Animator>();
         _camera = Camera.main;
+        TransitionState = new();
         HomeState = new();
         WarState = new(WarEnter, WarExit, WarUpdate);
         BuildState = new(BuildEnter, BuildExit);
@@ -88,12 +92,14 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         _magnetColliderRadius = _magnetCollider.radius;
-        CameraManager.Instance.SetPlayer(this);
         Cogs = GetComponent<Cogs>();
-        
+        Damagable = GetComponent<Damagable>();
+
         _controller = GetComponent<CharacterController>();
         _fallTimeoutDelta = FallTimeout;
         InstallSlots();
+        if (CameraManager.Instance == null) return;
+        CameraManager.Instance.SetPlayer(this);
     }
 
     // Update is called once per frame
@@ -125,7 +131,10 @@ public class PlayerController : MonoBehaviour
 
     void WarEnter()
     {
-
+        if(Damagable.Shield != null)
+        {
+            Damagable.Shield.gameObject.SetActive(true);
+        }
     }
 
     void WarUpdate()
@@ -142,6 +151,10 @@ public class PlayerController : MonoBehaviour
 
     void WarExit()
     {
+        if (Damagable.Shield != null)
+        {
+            Damagable.Shield.gameObject.SetActive(false);
+        }
         WalkAnimation(0, 0);
         foreach (GunSlot slot in slots)
         {
@@ -171,6 +184,7 @@ public class PlayerController : MonoBehaviour
 
     public void OnHealthChange(float healthPercent)
     {
+        if(GamePlayUI.Instance == null) return;
         GamePlayUI.Instance.UpdateHealthBar(healthPercent);
     }
 
@@ -188,6 +202,7 @@ public class PlayerController : MonoBehaviour
     public void Die()
     {
         GameManager.Instance.GameOver(success:false);
+        Instantiate(GameManager.Instance.ExplosionPrefab, transform.position, Quaternion.identity);
         Cogs.Spill();
         Destroy(gameObject);
     }
@@ -327,7 +342,7 @@ public class PlayerController : MonoBehaviour
             return;
         }
 
-        if (StateMachine.IsState(BuildState) || StateMachine.IsState(HomeState))
+        if (StateMachine.IsState(TransitionState) || StateMachine.IsState(HomeState))
         {
             transform.DOMoveY(transform.position.y + FlyingDistance, 1);
         }

@@ -14,12 +14,14 @@ public class BuildUI : MonoBehaviour
 
     public VisualTreeAsset slotButtonTemplate;
     public VisualTreeAsset gunCardTemplate;
+    public VisualTreeAsset enhancementItemTemplate;
 
     UIDocument document;
     public static BuildUI Instance;
 
     GunSlotsUIController _slotsUI;
     GunSlotUIController _selectedSlotUI;
+    EnhancementsListController _enhancementsUI;
 
     VisualElement _selectedGunOperations;
 
@@ -45,6 +47,7 @@ public class BuildUI : MonoBehaviour
     {
         _slotsUI = new GunSlotsUIController(document, _camera);
         _selectedSlotUI = new GunSlotUIController(document);
+        _enhancementsUI = new EnhancementsListController(document);
 
         _doneButton = document.rootVisualElement.Q<Button>("DoneButton");
         _doneButton.clicked += DoneButton;
@@ -52,6 +55,11 @@ public class BuildUI : MonoBehaviour
         _selectedSlotUI.Show(false);
 
         StateMachine.SetState(PlayerBuildState);
+    }
+
+    private void OnDisable()
+    {
+        StateMachine.SetState(DisabledState);
     }
 
     //void OnDisable()
@@ -68,7 +76,7 @@ public class BuildUI : MonoBehaviour
     async void DoneButton()
     {
         await Task.Delay(100);
-        StateMachine.SetState(DisabledState);
+        //StateMachine.SetState(DisabledState);
         GameManager.Instance.GoNextLevel();
     }
 
@@ -76,12 +84,14 @@ public class BuildUI : MonoBehaviour
     {
         _slotsUI.CreateSlotButtons();
         _slotsUI.Show(true);
+        _enhancementsUI.Show(true);
         CameraManager.Instance.FacePlayer();
     }
 
     void PlayerBuildExit()
     {
         _slotsUI.Show(false);
+        _enhancementsUI.Show(false);
     }
 
     void PlayerBuildUpdate()
@@ -130,6 +140,7 @@ public class BuildUI : MonoBehaviour
     public void InstallGun()
     {
         GameManager.Instance.InstallGun(SelectedSlot, _selectedGun);
+        _selectedSlotUI = new GunSlotUIController(document);
         _selectedSlotUI.SetSelectedGun(new GunSelectionItem(_selectedGun, SelectedSlot.CurrentGun));
         //BackFromSlot();
     }
@@ -137,6 +148,7 @@ public class BuildUI : MonoBehaviour
     public void UpgradeGun()
     {
         GameManager.Instance.UpgradeGun(SelectedSlot);
+        _selectedSlotUI = new GunSlotUIController(document);
         _selectedSlotUI.SetSelectedGun(new GunSelectionItem(_selectedGun, SelectedSlot.CurrentGun));
         //BackFromSlot();
     }

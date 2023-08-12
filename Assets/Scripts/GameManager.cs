@@ -7,14 +7,17 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
-    public List<GunDefinition> Guns;
     [SerializeField] GameObject _homeScene;
+    public List<GunDefinition> Guns;
+    public List<EnhancementDefinition> Enhancements;
+    public List<LevelDefinition> Levels;
     public GameObject CogPrefab;
     public GameObject PlayerPrefab;
-    public List<LevelDefinition> Levels;
+    public GameObject ExplosionPrefab;
     public int CurrentLevelIndex = 0;
     bool _currentIsLastLevel => CurrentLevelIndex+1 >= Levels.Count;
     StateMachine _stateMachine = new();
+    State _transitionState;
     State _homeState;
     State _warState;
     State _buildState;
@@ -29,6 +32,7 @@ public class GameManager : MonoBehaviour
     void Awake()
     {
         Instance = this;
+        _transitionState = new(TransitionEnter);
         _homeState = new(HomeEnter, HomeExit);
         _warState = new(WarEnter);
         _buildState = new(BuildEnter);
@@ -54,6 +58,12 @@ public class GameManager : MonoBehaviour
 
     }
 
+    void TransitionEnter()
+    {
+        PlayerController.Instance.StateMachine.SetState(PlayerController.Instance.TransitionState);
+        UIManager.Instance.StateMachine.SetState(UIManager.Instance.TransitionState);
+    }
+
     void HomeEnter()
     {
         UIManager.Instance.StateMachine.SetState(UIManager.Instance.HomeState);
@@ -77,21 +87,22 @@ public class GameManager : MonoBehaviour
 
     IEnumerator GoToBuildFromWar()
     {
-        // 1 -  set player state build and fly
-        _stateMachine.SetState(_buildState);
+        // 1 - fly
         _player.JumpAnimation();
+        _stateMachine.SetState(_transitionState);
         yield return new WaitForSeconds(1);
         // 2 - face cam
         CameraManager.Instance.FacePlayer();
-        // 3 - show ui
         yield return new WaitForSeconds(1);
-        UIManager.Instance.StateMachine.SetState(UIManager.Instance.BuildState);
+        // 3 - set build state
+        _stateMachine.SetState(_buildState);
         yield return null;
     }
 
     void BuildEnter()
     {
         _player.StateMachine.SetState(_player.BuildState);
+        UIManager.Instance.StateMachine.SetState(UIManager.Instance.BuildState);
     }
 
     void PauseEnter()
@@ -118,15 +129,31 @@ public class GameManager : MonoBehaviour
 
     public void InstallGun(GunSlot slot, GunDefinition gun)
     {
+        Cogs cogs = PlayerController.Instance.GetComponent<Cogs>();
+        int cost = gun.Levels[0].Cost;
+        if (cogs.TotalCogs < cost)
+        {
+            UIManager.Instance.Modal.Alert("Insufficient amount of cogs");
+            return;
+        }
         slot.InstallGun(gun);
-        _player.Cogs.Spend(gun.Levels[0].Cost);
+        _player.Cogs.Spend(cost);
     }
 
     public void UpgradeGun(GunSlot slot)
     {
+        if (slot.CurrentGun.Definition.Levels.Length <= slot.CurrentGun.Level + 1) return;
+
+        Cogs cogs = PlayerController.Instance.GetComponent<Cogs>();
+        int cost = slot.CurrentGun.Definition.Levels[slot.CurrentGun.Level+1].Cost;
+        if (cogs.TotalCogs < cost)
+        {
+            UIManager.Instance.Modal.Alert("Insufficient amount of cogs");
+            return;
+        }
         bool upgraded = slot.UpgradeGun();
         if (!upgraded) return;
-        _player.Cogs.Spend(slot.CurrentGun.Definition.Levels[slot.CurrentGun.Level].Cost);
+        _player.Cogs.Spend(cost);
     }
 
     public void LevelCompleted()
@@ -174,7 +201,7 @@ public class GameManager : MonoBehaviour
 
     public async void FlyToStartGame()
     {
-        UIManager.Instance.StateMachine.SetState(UIManager.Instance.HomeTransitionState);
+        UIManager.Instance.StateMachine.SetState(UIManager.Instance.TransitionState);
         PlayerController.Instance.JumpAnimation();
         await Task.Delay(1300);// wait for the flying
         StartGame();

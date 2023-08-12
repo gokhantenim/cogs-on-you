@@ -14,7 +14,7 @@ public class UIManager : MonoBehaviour
     public ModalView Modal;
 
     public StateMachine StateMachine = new();
-    public State HomeTransitionState;
+    public State TransitionState;
     public State HomeState;
     public State GamePlayState;
     public State GameOverState;
@@ -28,14 +28,22 @@ public class UIManager : MonoBehaviour
         GamePlayUI.gameObject.SetActive(false);
         HomeUI.gameObject.SetActive(false);
 
-        HomeTransitionState = new();
+        TransitionState = new();
         HomeState = new(
                 enter: () => { HomeUI.gameObject.SetActive(true); },
                 exit: () => { HomeUI.gameObject.SetActive(false); }
             );
         GamePlayState = new(
-                enter: () => { GamePlayUI.gameObject.SetActive(true); },
-                exit: () => { GamePlayUI.gameObject.SetActive(false); }
+                enter: () => { 
+                    GamePlayUI.gameObject.SetActive(true);
+                    GamePlayUI.Head.SetActive(true);
+                    GamePlayUI.Controls.SetActive(true);
+                },
+                exit: () => { 
+                    GamePlayUI.gameObject.SetActive(false);
+                    GamePlayUI.Head.SetActive(false);
+                    GamePlayUI.Controls.SetActive(false);
+                }
             );
         GameOverState = new(
                 exit: () => { Modal.Hide(); }
@@ -45,8 +53,16 @@ public class UIManager : MonoBehaviour
                 exit: () => { Modal.Hide(); }
             );
         BuildState = new(
-                enter: () => { BuildUI.gameObject.SetActive(true); },
-                exit: () => { BuildUI.gameObject.SetActive(false); }
+                enter: () => { 
+                    BuildUI.gameObject.SetActive(true);
+                    GamePlayUI.gameObject.SetActive(true);
+                    GamePlayUI.Head.SetActive(true);
+                },
+                exit: () => { 
+                    BuildUI.gameObject.SetActive(false);
+                    GamePlayUI.gameObject.SetActive(false);
+                    GamePlayUI.Head.SetActive(false);
+                }
             );
     }
 

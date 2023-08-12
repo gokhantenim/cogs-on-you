@@ -20,7 +20,7 @@ public class LevelManager : MonoBehaviour
         }
     }
     public LevelDefinition LoadedLevel;
-    [SerializeField] NavMeshSurface _navigation;
+    [SerializeField] NavMeshSurface[] _navigations;
     string _objectsContainerName = "LevelObjectsContainer";
     GameObject _objectsContainer;
     int _totalEnemies = 0;
@@ -56,7 +56,10 @@ public class LevelManager : MonoBehaviour
         }
 
         InstantiateLevelObjects();
-        _navigation.BuildNavMesh();
+        foreach (NavMeshSurface navigation in _navigations)
+        {
+            navigation.BuildNavMesh();
+        }
         NavMeshAgent[] navMeshAgents = FindObjectsOfType<NavMeshAgent>();
         foreach (NavMeshAgent agent in navMeshAgents)
         {
@@ -97,7 +100,7 @@ public class LevelManager : MonoBehaviour
             Damagable damagable = levelObjectGameObject.GetComponent<Damagable>();
             if (damagable != null && levelObjectDefinition.Health > 0)
             {
-                damagable.Health = levelObjectDefinition.Health;
+                damagable.SetHealth(levelObjectDefinition.Health, true);
             }
             Cogs cogs = levelObjectGameObject.GetComponent<Cogs>();
             if (cogs != null && levelObjectDefinition.TotalCogs > 0)

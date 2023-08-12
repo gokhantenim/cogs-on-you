@@ -45,17 +45,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: def3dad973d70da40935893372fb175b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _homeScene: {fileID: 7147458720773765840}
   Guns:
   - {fileID: 11400000, guid: 33fb879092020924babe1298ca703b9c, type: 2}
   - {fileID: 11400000, guid: 1615ae4d9f8e45342906363277799c15, type: 2}
-  _homeScene: {fileID: 7147458720773765840}
+  - {fileID: 11400000, guid: 772458a23c22e0f4c8017de9293069d1, type: 2}
+  Enhancements:
+  - {fileID: 11400000, guid: 10e5f65f05ac2094dbae54df395797ec, type: 2}
+  - {fileID: 11400000, guid: 549ed5b394975e143a8523f2cb4978a6, type: 2}
+  Levels:
+  - {fileID: 11400000, guid: 5f494a01ab1c7d743a1d43ea04b8b4c5, type: 2}
+  - {fileID: 11400000, guid: ad0f2ff147975e64f91f067638c6f914, type: 2}
   CogPrefab: {fileID: 2927140540786661292, guid: b2ce6cff40652c745b28ac3c53e98ec7,
     type: 3}
   PlayerPrefab: {fileID: 1377454496584336413, guid: 5d9766cae48a06043b73671272607ef2,
     type: 3}
-  Levels:
-  - {fileID: 11400000, guid: 5f494a01ab1c7d743a1d43ea04b8b4c5, type: 2}
-  - {fileID: 11400000, guid: ad0f2ff147975e64f91f067638c6f914, type: 2}
+  ExplosionPrefab: {fileID: 596446786563888225, guid: a66a9d5fc33c4db4ea3d1ce3c8f0a79a,
+    type: 3}
   CurrentLevelIndex: 0
 --- !u!1001 &774972904094344473
 PrefabInstance:
@@ -124,6 +130,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: HomeScene
+      objectReference: {fileID: 0}
+    - target: {fileID: 7634056662330138569, guid: 74238e9d9654ddf4f9767598d247ab9a,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

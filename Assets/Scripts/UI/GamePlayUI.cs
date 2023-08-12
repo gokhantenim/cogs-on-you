@@ -27,6 +27,8 @@ public class GamePlayUI : MonoBehaviour
     [SerializeField] TextMeshProUGUI _totalCogsText;
     [SerializeField] TextMeshProUGUI _totalEnemiesText;
     [SerializeField] TextMeshProUGUI _levelNoText;
+    public GameObject Head;
+    public GameObject Controls;
     float _textHealthPercent = 1;
     float _healthPercent = 1;
     Tween _whiteBarTween;
@@ -51,6 +53,32 @@ public class GamePlayUI : MonoBehaviour
 
     public void UpdateHealthBar(float healthPercent)
     {
+        if(healthPercent < _healthPercent)
+        {
+            DecreaseHealthTo(healthPercent);
+        } else
+        {
+            IncreaseHealthTo(healthPercent);
+        }
+
+        _healthPercent = healthPercent;
+    }
+
+    void IncreaseHealthTo(float healthPercent)
+    {
+        Vector3 whiteScale = _whiteBar.gameObject.transform.localScale;
+        Vector3 greenScale = _greenBar.gameObject.transform.localScale;
+
+        _healthTextTween = DOTween.To((value) => {
+            _textHealthPercent = value;
+            SetHealthPercentText(value);
+            _whiteBar.gameObject.transform.localScale = whiteScale.Rewrite(x: value);
+            _greenBar.gameObject.transform.localScale = greenScale.Rewrite(x: value);
+        }, _textHealthPercent, healthPercent, 0.5f);
+    }
+
+    void DecreaseHealthTo(float healthPercent)
+    {
         if (_whiteBarTween != null)
         {
             _whiteBarTween.Kill();
@@ -59,7 +87,7 @@ public class GamePlayUI : MonoBehaviour
         Vector3 greenScale = _greenBar.gameObject.transform.localScale;
         greenScale.x = healthPercent;
         _greenBar.gameObject.transform.localScale = greenScale;
-        _whiteBarTween = DOTween.To((value)=> {
+        _whiteBarTween = DOTween.To((value) => {
             whiteScale.x = value;
             _whiteBar.gameObject.transform.localScale = whiteScale;
         }, whiteScale.x, healthPercent, 0.5f);
@@ -68,8 +96,6 @@ public class GamePlayUI : MonoBehaviour
             _textHealthPercent = value;
             SetHealthPercentText(value);
         }, _textHealthPercent, healthPercent, 0.5f);
-
-        _healthPercent = healthPercent;
     }
 
     void SetHealthPercentText(float value)
