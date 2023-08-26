@@ -21,8 +21,8 @@ public class GamePlayUI : MonoBehaviour
         }
     }
 
-    [SerializeField] Image _greenBar;
-    [SerializeField] Image _whiteBar;
+    [SerializeField] Transform _greenBar;
+    [SerializeField] Transform _whiteBar;
     [SerializeField] TextMeshProUGUI _healthPercentText;
     [SerializeField] TextMeshProUGUI _totalCogsText;
     [SerializeField] TextMeshProUGUI _totalEnemiesText;
@@ -66,14 +66,14 @@ public class GamePlayUI : MonoBehaviour
 
     void IncreaseHealthTo(float healthPercent)
     {
-        Vector3 whiteScale = _whiteBar.gameObject.transform.localScale;
-        Vector3 greenScale = _greenBar.gameObject.transform.localScale;
+        Vector3 whiteScale = _whiteBar.localScale;
+        Vector3 greenScale = _greenBar.localScale;
 
         _healthTextTween = DOTween.To((value) => {
             _textHealthPercent = value;
             SetHealthPercentText(value);
-            _whiteBar.gameObject.transform.localScale = whiteScale.Rewrite(x: value);
-            _greenBar.gameObject.transform.localScale = greenScale.Rewrite(x: value);
+            _whiteBar.localScale = whiteScale.Rewrite(x: value);
+            _greenBar.localScale = greenScale.Rewrite(x: value);
         }, _textHealthPercent, healthPercent, 0.5f);
     }
 
@@ -83,13 +83,13 @@ public class GamePlayUI : MonoBehaviour
         {
             _whiteBarTween.Kill();
         }
-        Vector3 whiteScale = _whiteBar.gameObject.transform.localScale;
-        Vector3 greenScale = _greenBar.gameObject.transform.localScale;
+        Vector3 whiteScale = _whiteBar.localScale;
+        Vector3 greenScale = _greenBar.localScale;
         greenScale.x = healthPercent;
-        _greenBar.gameObject.transform.localScale = greenScale;
+        _greenBar.localScale = greenScale;
         _whiteBarTween = DOTween.To((value) => {
             whiteScale.x = value;
-            _whiteBar.gameObject.transform.localScale = whiteScale;
+            _whiteBar.localScale = whiteScale;
         }, whiteScale.x, healthPercent, 0.5f);
 
         _healthTextTween = DOTween.To((value) => {

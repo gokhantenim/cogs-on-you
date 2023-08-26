@@ -9,6 +9,13 @@ public class LightningGun : Gun
     [SerializeField] Transform _firePoint;
     [SerializeField] float _lightningFrequency = 1;
     Vector3[] points;
+    AudioSource _audioSource;
+
+    protected override void Awake()
+    {
+        _audioSource = GetComponent<AudioSource>();
+        base.Awake();
+    }
 
     public override void FireUpdate()
     {
@@ -57,8 +64,15 @@ public class LightningGun : Gun
         _lineRenderer.SetPositions(points);
     }
 
+    public override void FireStart()
+    {
+        _audioSource.Play();
+        base.FireStart();
+    }
+
     public override void FireStop()
     {
+        _audioSource.Stop();
         _lineRenderer.positionCount = 0;
         base.FireStop();
     }

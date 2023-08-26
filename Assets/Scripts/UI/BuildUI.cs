@@ -62,12 +62,6 @@ public class BuildUI : MonoBehaviour
         StateMachine.SetState(DisabledState);
     }
 
-    //void OnDisable()
-    //{
-    //    Button backButton = document.rootVisualElement.Q<Button>("BackButton");
-    //    backButton.clicked -= BackButton;
-    //}
-
     private void Update()
     {
         StateMachine.Update();
@@ -76,8 +70,8 @@ public class BuildUI : MonoBehaviour
     async void DoneButton()
     {
         await Task.Delay(100);
-        //StateMachine.SetState(DisabledState);
         GameManager.Instance.GoNextLevel();
+        SoundManager.Instance.PlayButtonSound();
     }
 
     void PlayerBuildEnter()
@@ -135,6 +129,7 @@ public class BuildUI : MonoBehaviour
     public void BackFromSlot()
     {
         StateMachine.SetState(PlayerBuildState);
+        SoundManager.Instance.PlayButtonSound();
     }
 
     public void InstallGun()
@@ -142,7 +137,6 @@ public class BuildUI : MonoBehaviour
         GameManager.Instance.InstallGun(SelectedSlot, _selectedGun);
         _selectedSlotUI = new GunSlotUIController(document);
         _selectedSlotUI.SetSelectedGun(new GunSelectionItem(_selectedGun, SelectedSlot.CurrentGun));
-        //BackFromSlot();
     }
 
     public void UpgradeGun()
@@ -150,6 +144,5 @@ public class BuildUI : MonoBehaviour
         GameManager.Instance.UpgradeGun(SelectedSlot);
         _selectedSlotUI = new GunSlotUIController(document);
         _selectedSlotUI.SetSelectedGun(new GunSelectionItem(_selectedGun, SelectedSlot.CurrentGun));
-        //BackFromSlot();
     }
 }

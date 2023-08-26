@@ -20,6 +20,7 @@ public class RepairEnhancement : EnhancementDefinition
             UIManager.Instance.Modal.Alert("Your health is already full");
             return;
         }
+        SoundManager.Instance.PlayBuildSound();
         cogs.Spend(Cost);
         damagable.ResetHealth();
     }

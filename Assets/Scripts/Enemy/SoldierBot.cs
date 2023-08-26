@@ -29,6 +29,7 @@ public class SoldierBot : Enemy
     Vector3 _initialLaserScale;
     Vector3 _lastAttackPosition;
     Coroutine _attackCoroutine;
+    AudioSource _audioSource;
     string _armRigTweenId => "gun-arm-rig-" + gameObject.GetInstanceID();
     string _laserScaleTweenId => "laser-" + gameObject.GetInstanceID();
 
@@ -39,6 +40,7 @@ public class SoldierBot : Enemy
         //_aimState = new(AimEnter, AimExit, Aim);
         _attackState = new(AttackEnter, AttackExit, Attack);
 
+        _audioSource = GetComponent<AudioSource>();
         _agent = GetComponent<NavMeshAgent>();
         _animator.fireEvents = false;
         base.Awake();
@@ -322,6 +324,7 @@ public class SoldierBot : Enemy
         projectileGameobject.transform.rotation = Quaternion.LookRotation(targetDirection, Vector3.forward);
         SoldierBotProjectile bullet = projectileGameobject.GetComponent<SoldierBotProjectile>();
         bullet.Velocity = targetDirection.normalized * 50;
+        _audioSource.Play();
         //Rigidbody bulletRigidbody = projectileGameobject.GetComponent<Rigidbody>();
         //bulletRigidbody.AddForce(targetDirection.normalized * 1000);
     }

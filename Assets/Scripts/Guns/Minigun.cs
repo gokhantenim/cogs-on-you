@@ -7,7 +7,13 @@ public class Minigun : Gun
     [SerializeField] GameObject graphic;
     [SerializeField] GameObject bulletPrefab;
     [SerializeField] Transform firePoint;
+    AudioSource _audioSource;
 
+    protected override void Awake()
+    {
+        _audioSource = GetComponent<AudioSource>();
+        base.Awake();
+    }
 
     public override void FireUpdate()
     {
@@ -25,6 +31,7 @@ public class Minigun : Gun
         MinigunProjectile projectile = projectileGameobject.GetComponent<MinigunProjectile>();
         projectile.gun = this;
         projectile.Velocity = targetDirection.normalized * 150;
+        _audioSource.Play();
         //Rigidbody bulletRigidbody = projectileGameobject.GetComponent<Rigidbody>();
         //bulletRigidbody.AddForce(targetDirection.normalized * 10000);
     }

@@ -10,6 +10,7 @@ public class ModalView : MonoBehaviour
     public GameObject FailureModalView;
     public GameObject PauseModalView;
     public GameObject SettingsModalView;
+    public GameObject CreditsModalView;
     [SerializeField] GameObject _alertModalView;
     [SerializeField] TextMeshProUGUI _alertMessageText;
 
@@ -39,6 +40,7 @@ public class ModalView : MonoBehaviour
     {
         _alertMessageText.text = message;
         _alertModalView.SetActive(true);
+        SoundManager.Instance.PlayAlertSound();
     }
 
     public void AlertOkButton()

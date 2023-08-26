@@ -19,6 +19,7 @@ public class Tank : Enemy
     [SerializeField] GameObject _projectilePrefab;
     Vector3 _lastKnownPosition = Vector3.zero;
     float _lastRotationY;
+    AudioSource _audioSource;
 
     protected override void Awake()
     {
@@ -27,6 +28,7 @@ public class Tank : Enemy
         //_chaseState = new(ChaseEnter, ChaseExit, Chase);
         _attackState = new(AttackEnter, AttackExit, Attack);
 
+        _audioSource = GetComponent<AudioSource>();
         _agent = GetComponent<NavMeshAgent>();
         SetAgentPlay(true);
         base.Awake();
@@ -208,5 +210,6 @@ public class Tank : Enemy
 
         TankProjectile bullet = projectileGameobject.GetComponent<TankProjectile>();
         bullet.Velocity = _gun.transform.forward.normalized * -1 * 50;
+        _audioSource.Play();
     }
 }

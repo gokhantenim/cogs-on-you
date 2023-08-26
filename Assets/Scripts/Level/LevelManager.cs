@@ -118,7 +118,14 @@ public class LevelManager : MonoBehaviour
         LevelObject[] levelObjects = FindObjectsOfType<LevelObject>();
         foreach (LevelObject levelObject in levelObjects)
         {
-            Destroy(levelObject.gameObject);
+            if (Application.isEditor)
+            {
+                DestroyImmediate(levelObject.gameObject);
+            }
+            else
+            {
+                Destroy(levelObject.gameObject);
+            }
         }
     }
 

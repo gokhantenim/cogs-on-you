@@ -10,6 +10,6 @@
                 <ui:Label text="0" display-tooltip-when-elided="true" name="Cost" style="margin-left: 0; margin-top: 0; font-size: 35px; -unity-font-style: bold; color: rgb(255, 224, 0); flex-grow: 1; border-left-width: 0; border-left-color: rgb(255, 255, 255); border-right-color: rgb(255, 255, 255); border-top-color: rgb(255, 255, 255); border-bottom-color: rgb(255, 255, 255); padding-left: 0; -unity-text-align: upper-right; padding-right: 20px;" />
             </ui:VisualElement>
         </ui:VisualElement>
-        <ui:Button text="BUY" display-tooltip-when-elided="true" name="BuyButton" style="margin-left: 20px; margin-right: 0; margin-top: 20px; margin-bottom: 0; padding-left: 50px; padding-right: 50px; padding-top: 20px; padding-bottom: 20px; font-size: 32px; overflow: hidden;" />
+        <ui:Button text="BUY" display-tooltip-when-elided="true" name="BuyButton" style="margin-left: 20px; margin-right: 0; margin-top: 20px; margin-bottom: 0; padding-left: 50px; padding-right: 50px; padding-top: 20px; padding-bottom: 20px; font-size: 32px; overflow: hidden; background-color: rgba(188, 188, 188, 0); background-image: url(&apos;project://database/Assets/Sprites/ui-elements.png?fileID=1002829431&amp;guid=6e3d7d297f497de4e8e1341b75befbd1&amp;type=3#ui-elements_18&apos;); border-top-width: 0; border-right-width: 0; border-bottom-width: 0; border-left-width: 0;" />
     </ui:VisualElement>
 </ui:UXML>

@@ -44,6 +44,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] SphereCollider _magnetCollider;
     float _magnetColliderRadius = 0;
 
+    AudioSource _audioSource;
     public Cogs Cogs;
     public Damagable Damagable;
     Camera _camera;
@@ -71,6 +72,12 @@ public class PlayerController : MonoBehaviour
 
     void Awake()
     {
+        _magnetColliderRadius = _magnetCollider.radius;
+        _fallTimeoutDelta = FallTimeout;
+        _audioSource = GetComponent<AudioSource>();
+        Cogs = GetComponent<Cogs>();
+        Damagable = GetComponent<Damagable>();
+        _controller = GetComponent<CharacterController>();
         _animator = GetComponent<Animator>();
         _camera = Camera.main;
         TransitionState = new();
@@ -91,12 +98,6 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
-        _magnetColliderRadius = _magnetCollider.radius;
-        Cogs = GetComponent<Cogs>();
-        Damagable = GetComponent<Damagable>();
-
-        _controller = GetComponent<CharacterController>();
-        _fallTimeoutDelta = FallTimeout;
         InstallSlots();
         if (CameraManager.Instance == null) return;
         CameraManager.Instance.SetPlayer(this);
@@ -320,12 +321,14 @@ public class PlayerController : MonoBehaviour
     {
         if (_footstepAudioClips.Length == 0) return;
         var index = UnityEngine.Random.Range(0, _footstepAudioClips.Length);
-        AudioSource.PlayClipAtPoint(_footstepAudioClips[index], _camera.transform.position, _footstepAudioVolume);
+        _audioSource.PlayOneShot(_footstepAudioClips[index]);
+        //AudioSource.PlayClipAtPoint(_footstepAudioClips[index], _camera.transform.position, _footstepAudioVolume);
     }
 
     private void OnLand(AnimationEvent animationEvent)
     {
-        AudioSource.PlayClipAtPoint(_landingAudioClip, _camera.transform.position, _footstepAudioVolume);
+        _audioSource.PlayOneShot(_landingAudioClip);
+        //AudioSource.PlayClipAtPoint(_landingAudioClip, _camera.transform.position, _footstepAudioVolume);
     }
 
     public void OnPressJump()

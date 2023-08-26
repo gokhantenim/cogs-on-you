@@ -25,7 +25,7 @@ public class MagneticShieldEnhancement : EnhancementDefinition
         GameObject shield = Instantiate(ShieldPrefab, damagable.transform);
         shield.transform.position = PlayerController.Instance.ShieldPosition.position;
         damagable.Shield = shield.GetComponent<MagneticShield>();
-
+        SoundManager.Instance.PlayBuildSound();
         cogs.Spend(Cost);
     }
 }

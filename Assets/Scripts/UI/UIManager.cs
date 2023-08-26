@@ -71,6 +71,16 @@ public class UIManager : MonoBehaviour
         GameManager.Instance.FlyToStartGame();
     }
 
+    public void CreditsButton()
+    {
+        Modal.Show(Modal.CreditsModalView);
+    }
+
+    public void SettingsButton()
+    {
+        Modal.Show(Modal.SettingsModalView);
+    }
+
     public async void RestartGameButton()
     {
         await Task.Delay(100);

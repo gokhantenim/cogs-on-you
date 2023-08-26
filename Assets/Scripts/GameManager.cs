@@ -138,6 +138,7 @@ public class GameManager : MonoBehaviour
         }
         slot.InstallGun(gun);
         _player.Cogs.Spend(cost);
+        SoundManager.Instance.PlayBuildSound();
     }
 
     public void UpgradeGun(GunSlot slot)
@@ -154,6 +155,7 @@ public class GameManager : MonoBehaviour
         bool upgraded = slot.UpgradeGun();
         if (!upgraded) return;
         _player.Cogs.Spend(cost);
+        SoundManager.Instance.PlayBuildSound();
     }
 
     public void LevelCompleted()

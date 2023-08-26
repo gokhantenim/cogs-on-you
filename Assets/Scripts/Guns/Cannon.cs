@@ -6,7 +6,13 @@ public class Cannon : Gun
 {
     [SerializeField] GameObject bulletPrefab;
     [SerializeField] Transform firePoint;
+    AudioSource _audioSource;
 
+    protected override void Awake()
+    {
+        _audioSource = GetComponent<AudioSource>();
+        base.Awake();
+    }
     public override void Fire()
     {
         Vector3 targetDirection = TargetDirection();
@@ -17,6 +23,7 @@ public class Cannon : Gun
         CannonProjectile projectile = bulletGameobject.GetComponent<CannonProjectile>();
         projectile.gun = this;
         projectile.Velocity = targetDirection.normalized * 75;
+        _audioSource.Play();
         //Rigidbody bulletRigidbody = bulletGameobject.GetComponent<Rigidbody>();
         //bulletRigidbody.AddForce(targetDirection.normalized * 10000);
     }

@@ -30,5 +30,6 @@ public class Cog : MonoBehaviour
         Cogs cogs = collider.gameObject.GetComponent<Cogs>();
         if(cogs == null) return;
         cogs.Collect(amount);
+        SoundManager.Instance.PlayCollectSound();
     }
 }
