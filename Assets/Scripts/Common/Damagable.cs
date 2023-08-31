@@ -51,6 +51,11 @@ public class Damagable : MonoBehaviour
 
     public void ResetHealth()
     {
+        if(Shield != null)
+        {
+            Destroy(Shield.gameObject);
+            Shield = null;
+        }
         SetHealth(MaxHealth);
     }
 }

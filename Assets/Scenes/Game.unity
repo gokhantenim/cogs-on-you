@@ -195,7 +195,7 @@ PrefabInstance:
         type: 3}
       propertyPath: Levels.Array.data[1]
       value: 
-      objectReference: {fileID: 11400000, guid: ad0f2ff147975e64f91f067638c6f914,
+      objectReference: {fileID: 11400000, guid: 5f494a01ab1c7d743a1d43ea04b8b4c5,
         type: 2}
     - target: {fileID: 5636056259848974608, guid: e6f3f0ef88757de4b86113fa135dd298,
         type: 3}
@@ -349,12 +349,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4338293849164283651, guid: 5d9766cae48a06043b73671272607ef2,
-        type: 3}
-      propertyPath: DefaultGun
-      value: 
-      objectReference: {fileID: 11400000, guid: 33fb879092020924babe1298ca703b9c,
-        type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -496,6 +490,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8832352461311907650, guid: 9e0e79bc4f3c5f347b7777aac2560eae,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 3.5339355
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -568,6 +567,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: LevelManager
+      objectReference: {fileID: 0}
+    - target: {fileID: 8681677305002977665, guid: 7da5d68f15e213c4d9678cfe1d3f6b3a,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

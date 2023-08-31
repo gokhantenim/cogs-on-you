@@ -12,6 +12,20 @@ public class MagneticShield : MonoBehaviour
     Vector2 _iconEmptySize = new Vector2(100, 0);
     float _chargeDelay = 2;
     float _dechargeDelay = 5;
+    Tween _iconTween;
+    Tween _sphereTween;
+
+    private void OnDestroy()
+    {
+       if(_iconTween != null)
+        {
+            _iconTween.Kill();
+        }
+        if (_sphereTween != null)
+        {
+            _sphereTween.Kill();
+        }
+    }
 
     void Start()
     {
@@ -32,7 +46,7 @@ public class MagneticShield : MonoBehaviour
 
     void ChargeShield()
     {
-        _shieldIcon
+        _iconTween = _shieldIcon
             .DOSizeDelta(_iconFullSize, _chargeDelay)
             .SetEase(Ease.Linear)
             .OnComplete(OpenShield);
@@ -40,7 +54,7 @@ public class MagneticShield : MonoBehaviour
 
     void DechargeShield()
     {
-        _shieldIcon
+        _iconTween = _shieldIcon
             .DOSizeDelta(_iconEmptySize, _dechargeDelay)
             .SetEase(Ease.Linear)
             .OnComplete(CloseShield);
@@ -50,7 +64,7 @@ public class MagneticShield : MonoBehaviour
     {
         IsActive = true;
         _shieldSphere.SetActive(true);
-        _shieldSphere.transform
+        _sphereTween = _shieldSphere.transform
             .DOScale(3, 0.5f)
             .SetEase(Ease.OutBack);
         DechargeShield();
@@ -58,7 +72,7 @@ public class MagneticShield : MonoBehaviour
 
     void CloseShield()
     {
-        _shieldSphere.transform
+        _sphereTween = _shieldSphere.transform
             .DOScale(0, 0.5f)
             .SetEase(Ease.InQuad)
             .OnComplete(() =>

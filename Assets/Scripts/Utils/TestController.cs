@@ -9,6 +9,7 @@ public class TestController : MonoBehaviour
     {
         GamePlayUI.Instance.gameObject.SetActive(true);
         PlayerController.Instance.StateMachine.SetState(PlayerController.Instance.WarState);
+        CameraManager.Instance.StateMachine.SetState(CameraManager.Instance.FollowPlayerState);
     }
 
     // Update is called once per frame

@@ -38,11 +38,6 @@ public class Scanner : MonoBehaviour
         }
     }
 
-    void Start()
-    {
-        
-    }
-
     void Update()
     {
         _scanTimer -= Time.deltaTime;

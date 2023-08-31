@@ -26,7 +26,7 @@ public class GunSlotsUIController
     {
         _slotsContainer.Clear();
         slots.Clear();
-        foreach (GunSlot slot in PlayerController.Instance.slots)
+        foreach (GunSlot slot in PlayerController.Instance.Character.Slots)
         {
             AddSlotButton(slot);
         }

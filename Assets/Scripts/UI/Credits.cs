@@ -13,11 +13,37 @@ public class Credits : MonoBehaviour, IPointerClickHandler
     string content = @"
 <size=200%><color=yellow>Models</color></size>
 <u>
+<link=""https://poly.pizza/m/mNvWmEA4O4"">Ross by ""joney_lol"" via Poly Pizza</link>
+
+<link=""https://poly.pizza/m/rushH11mMq"">Rahul by ""joney_lol"" via Poly Pizza</link>
+
 <link=""https://poly.pizza/m/cW3zvvkMOM"">Tank model by ""Quaternius""</link>
 
 <link=""https://creazilla.com/nodes/1403691-buildings-pack-3d-model"">Buildings Pack 3D Model model by ""Quaternius""</link>
 
+<link=""https://poly.pizza/m/gYhoEOKItJ"">Rocks by ""Quaternius""</link>
+
+<link=""https://poly.pizza/m/w9VBrh7Nz0"">Mountains by ""Quaternius""</link>
+
 <link=""https://www.kenney.nl/assets/blaster-kit"">Blaster Kit by ""Kenney""</link>
+
+<link=""https://www.kenney.nl/assets/space-kit"">Space Kit by ""Kenney""</link>
+
+<link=""https://www.kenney.nl/assets/city-kit-commercial"">City Kit(Commercial) by ""Kenney""</link>
+
+<link=""https://www.kenney.nl/assets/city-kit-roads"">City Kit(Roads) by ""Kenney""</link>
+
+<link=""https://www.kenney.nl/assets/castle-kit"">Castle Kit by ""Kenney""</link>
+
+<link=""https://poly.pizza/m/7Jhw3p6TusU"">Mountain by ""Poly by Google""</link>
+
+<link=""https://poly.pizza/m/dmRuyy1VXEv"">Rock by ""Poly by Google""</link>
+
+<link=""https://poly.pizza/m/8yvoMOldbAq"">TerrainSnow01 by ""Aimé Tribolet"" via Poly Pizza</link>
+
+<link=""https://poly.pizza/m/27mUA9VkDjl"">TerrainSnow02  by ""Aimé Tribolet"" via Poly Pizza</link>
+
+<link=""https://poly.pizza/m/ayGMwxnpqie"">TerrainSnow02_C by ""Aimé Tribolet"" via Poly Pizza</link>
 </u>
 
 <size=200%><color=yellow>Sounds</color></size>

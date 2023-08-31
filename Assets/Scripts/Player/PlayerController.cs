@@ -34,7 +34,6 @@ public class PlayerController : MonoBehaviour
     public State BuildState;
     public State PauseState;
 
-    public GunSlot[] slots = new GunSlot[] { };
     public Transform CameraFollowTarget;
     public Transform CameraFaceTarget;
     public Transform CameraSlotTarget;
@@ -44,11 +43,12 @@ public class PlayerController : MonoBehaviour
     [SerializeField] SphereCollider _magnetCollider;
     float _magnetColliderRadius = 0;
 
+    public PlayerCharacter Character;
     AudioSource _audioSource;
     public Cogs Cogs;
     public Damagable Damagable;
     Camera _camera;
-    Animator _animator;
+    //Animator _animator;
     CharacterController _controller;
     float _speed = 10;
     public float Gravity = -15.0f;
@@ -69,16 +69,18 @@ public class PlayerController : MonoBehaviour
     [SerializeField] [Range(0, 1)] public float _footstepAudioVolume = 0.5f;
     Vector3 _horizontalMovement = Vector3.zero;
     Vector3 _verticalMovement = Vector3.zero;
+    Animator _animator;
 
     void Awake()
     {
+        _animator = GetComponent<Animator>();
         _magnetColliderRadius = _magnetCollider.radius;
         _fallTimeoutDelta = FallTimeout;
         _audioSource = GetComponent<AudioSource>();
         Cogs = GetComponent<Cogs>();
         Damagable = GetComponent<Damagable>();
         _controller = GetComponent<CharacterController>();
-        _animator = GetComponent<Animator>();
+        //_animator = GetComponent<Animator>();
         _camera = Camera.main;
         TransitionState = new();
         HomeState = new();
@@ -98,7 +100,7 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
-        InstallSlots();
+        Character.InstallSlots();
         if (CameraManager.Instance == null) return;
         CameraManager.Instance.SetPlayer(this);
     }
@@ -146,7 +148,7 @@ public class PlayerController : MonoBehaviour
         HorizontalMovementCheck();
         VerticalMovementCheck();
         Move();
-        WalkAnimation(InputManager.Instance.Move.x, InputManager.Instance.Move.z);
+        Character.WalkAnimation(InputManager.Instance.Move.x, InputManager.Instance.Move.z);
         FootStepSound();
     }
 
@@ -156,31 +158,20 @@ public class PlayerController : MonoBehaviour
         {
             Damagable.Shield.gameObject.SetActive(false);
         }
-        WalkAnimation(0, 0);
-        foreach (GunSlot slot in slots)
-        {
-            slot.SetTarget(null);
-        }
-    }
-
-    public void JumpAnimation()
-    {
-        _animator.SetTrigger("jump");
+        Character.WalkAnimation(0, 0);
+        Character.ResetTargets();
     }
 
     void BuildEnter()
     {
         _magnetCollider.radius = 1000;
-        foreach (GunSlot slot in slots)
-        {
-            slot.SetTargetToIdle();
-            slot.SetTarget(null);
-        }
+        Character.SetTargetsToIdle();
     }
 
     void BuildExit()
     {
         _magnetCollider.radius = _magnetColliderRadius;
+        Character.SetRigWeights(0);
     }
 
     public void OnHealthChange(float healthPercent)
@@ -206,15 +197,6 @@ public class PlayerController : MonoBehaviour
         Instantiate(GameManager.Instance.ExplosionPrefab, transform.position, Quaternion.identity);
         Cogs.Spill();
         Destroy(gameObject);
-    }
-
-    void InstallSlots()
-    {
-        foreach(GunSlot gunSlotDefinition in slots)
-        {
-            if (gunSlotDefinition.DefaultGun == null) continue;
-            gunSlotDefinition.InstallGun(gunSlotDefinition.DefaultGun);
-        }
     }
 
     public void Rotate()
@@ -253,12 +235,6 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    public void WalkAnimation(float x, float z)
-    {
-        _animator.SetFloat("move_x", x);
-        _animator.SetFloat("move_z", z);
-    }
-
     public void Move()
     {
         _controller.Move(_horizontalMovement + _verticalMovement);
@@ -268,10 +244,16 @@ public class PlayerController : MonoBehaviour
     {
         Vector3 spherePosition = new Vector3(transform.position.x, transform.position.y - _groundedOffset,
             transform.position.z);
-        _grounded = Physics.CheckSphere(spherePosition, _groundCheckRadius, _groundLayers,
+        bool checkGrounded = Physics.CheckSphere(spherePosition, _groundCheckRadius, _groundLayers,
             QueryTriggerInteraction.Ignore);
+        if(!_grounded && checkGrounded)
+        {
+            // landed
+            PlayLandSound();
+        }
+        _grounded = checkGrounded;
 
-        _animator.SetBool("grounded", _grounded);
+        Character.GroundedAnimation(_grounded);
     }
 
     void GravityCheck()
@@ -286,7 +268,7 @@ public class PlayerController : MonoBehaviour
 
             _fallTimeoutDelta = FallTimeout;
             _verticalVelocity = -5f;
-            _animator.SetBool("free_fall", false);
+            Character.FreeFallAnimation(false);
         }
         else
         {
@@ -297,7 +279,7 @@ public class PlayerController : MonoBehaviour
                 _fallTimeoutDelta -= Time.deltaTime;
             } else
             {
-                _animator.SetBool("free_fall", true);
+                Character.FreeFallAnimation(true);
                 _verticalVelocity += Gravity * 4 * Time.deltaTime;
             }
         }
@@ -311,10 +293,7 @@ public class PlayerController : MonoBehaviour
     public void SetTargets(List<Enemy> enemies) 
     {
         enemies = enemies.OrderBy(enemy => Vector3.Distance(enemy.transform.position, transform.position)).ToList();
-        foreach (GunSlot slot in slots)
-        {
-            slot.SetTarget(enemies.Count > 0 ? enemies[0] : null);
-        }
+        Character.SetTargets(enemies);
     }
 
     void PlayFootstepSound()
@@ -322,41 +301,86 @@ public class PlayerController : MonoBehaviour
         if (_footstepAudioClips.Length == 0) return;
         var index = UnityEngine.Random.Range(0, _footstepAudioClips.Length);
         _audioSource.PlayOneShot(_footstepAudioClips[index]);
-        //AudioSource.PlayClipAtPoint(_footstepAudioClips[index], _camera.transform.position, _footstepAudioVolume);
     }
 
-    private void OnLand(AnimationEvent animationEvent)
+    void PlayLandSound()
     {
         _audioSource.PlayOneShot(_landingAudioClip);
-        //AudioSource.PlayClipAtPoint(_landingAudioClip, _camera.transform.position, _footstepAudioVolume);
     }
 
     public void OnPressJump()
     {
         if (!StateMachine.IsState(WarState) || !_grounded) return;
-        _animator.SetTrigger("jump");
+        Jump();
     }
 
-    public void OnJumpAnimCompleted()
+    public void Jump()
     {
-        if (StateMachine.IsState(WarState))
-        {
-            Jumping = true;
-            return;
-        }
-
-        if (StateMachine.IsState(TransitionState) || StateMachine.IsState(HomeState))
-        {
-            transform.DOMoveY(transform.position.y + FlyingDistance, 1);
-        }
+        JumpAnimation(() => 
+            Jumping = true
+        );
     }
+
+    public void Fly()
+    {
+        JumpAnimation(() =>
+            transform.DOMoveY(transform.position.y + FlyingDistance, 1)
+        );
+    }
+
+    public void JumpAnimation(Action jumpAction)
+    {
+        StartCoroutine(JumpCoroutine(jumpAction));
+    }
+
+    IEnumerator JumpCoroutine(Action jumpAction)
+    {
+        Character.JumpAnimation();
+        yield return new WaitForSeconds(0.4f);
+        jumpAction();
+    }
+
+    //public void OnJumpAnimCompleted()
+    //{
+    //    if (StateMachine.IsState(WarState))
+    //    {
+    //        Jumping = true;
+    //        return;
+    //    }
+
+    //    if (StateMachine.IsState(TransitionState) || StateMachine.IsState(HomeState))
+    //    {
+    //        transform.DOMoveY(transform.position.y + FlyingDistance, 1);
+    //    }
+    //}
 
     public void ResetPlayer()
     {
-        InstallSlots();
+        Character.InstallSlots();
         Damagable damagable = GetComponent<Damagable>();
         damagable.ResetHealth();
         Cogs cogs = GetComponent<Cogs>();
         cogs.TotalCogs = 0;
     }
+
+    //public void JumpAnimation()
+    //{
+    //    _animator.SetTrigger("jump");
+    //}
+
+    //public void GroundedAnimation(bool isGrounded)
+    //{
+    //    _animator.SetBool("grounded", isGrounded);
+    //}
+
+    //public void FreeFallAnimation(bool isFreeFall)
+    //{
+    //    _animator.SetBool("free_fall", isFreeFall);
+    //}
+
+    //public void WalkAnimation(float x, float z)
+    //{
+    //    _animator.SetFloat("move_x", x);
+    //    _animator.SetFloat("move_z", z);
+    //}
 }

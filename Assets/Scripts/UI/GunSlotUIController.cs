@@ -119,7 +119,7 @@ public partial class GunSlotUIController
     void CreateGunsList()
     {
         _gunsList.fixedItemHeight = 300;
-        _gunsList.Q<ScrollView>().verticalScrollerVisibility = ScrollerVisibility.Hidden;
+        _gunsList.Q<ScrollView>().verticalScrollerVisibility = ScrollerVisibility.Auto;
         _gunsList.makeItem = () => {
             TemplateContainer instantiatedTemplate = BuildUI.Instance.gunCardTemplate.Instantiate();
             VisualElement gunCard = instantiatedTemplate.Q<VisualElement>("Gun");

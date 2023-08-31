@@ -88,7 +88,7 @@ public class GameManager : MonoBehaviour
     IEnumerator GoToBuildFromWar()
     {
         // 1 - fly
-        _player.JumpAnimation();
+        _player.Fly();
         _stateMachine.SetState(_transitionState);
         yield return new WaitForSeconds(1);
         // 2 - face cam
@@ -204,7 +204,7 @@ public class GameManager : MonoBehaviour
     public async void FlyToStartGame()
     {
         UIManager.Instance.StateMachine.SetState(UIManager.Instance.TransitionState);
-        PlayerController.Instance.JumpAnimation();
+        PlayerController.Instance.Fly();
         await Task.Delay(1300);// wait for the flying
         StartGame();
     }

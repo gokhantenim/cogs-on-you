@@ -19,9 +19,7 @@ public class GunSlot : MonoBehaviour
 
     void Update()
     {
-        if (_target == null || _rig == null) return;
-
-        //Debug.DrawRay(transform.position, TargetDirection());
+        if (_target == null || _rig == null || CurrentGun == null) return;
 
         _ikTarget.transform.position = Vector3.Lerp(_ikTarget.transform.position, TargetPosition(), Time.deltaTime * 4);
         _ikTarget.transform.rotation = Quaternion.LookRotation(TargetDirection(), Vector3.up);
@@ -41,18 +39,6 @@ public class GunSlot : MonoBehaviour
         _ikTarget.transform.rotation = _ikIdlePosition.rotation;
     }
 
-    protected Vector3 TargetPosition()
-    {
-        if (_target.TargetPosition != null) return _target.TargetPosition.position;
-        return _target.transform.position;
-    }
-
-    protected Vector3 TargetDirection()
-    {
-        if (_target == null) return Vector3.zero;
-        return _target.transform.position - transform.position;
-    }
-
     public void SetTarget(Enemy target)
     {
         if (_target != null && _target.Equals(target)) return;
@@ -62,9 +48,21 @@ public class GunSlot : MonoBehaviour
         CurrentGun.SetTarget(target);
 
         if (_rig == null) return;
-        //_rig.weight = target == null ? 0 : 1;
+        SetRigWeight(1);
         if (target != null) return;
         SetTargetToIdle();
+    }
+
+    protected Vector3 TargetPosition()
+    {
+        if (_target.TargetPosition != null) return _target.TargetPosition.position;
+        return _target.transform.position;
+    }
+
+    protected Vector3 TargetDirection()
+    {
+        if (_target == null) return Vector3.zero;
+        return TargetPosition() - transform.position;
     }
 
     public void InstantiateGun(GunDefinition gun)
