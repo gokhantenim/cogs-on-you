@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028334, g: 0.2257134, b: 0.30692226, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -189,8 +189,14 @@ PrefabInstance:
     - target: {fileID: 5636056259848974608, guid: e6f3f0ef88757de4b86113fa135dd298,
         type: 3}
       propertyPath: Levels.Array.size
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 5636056259848974608, guid: e6f3f0ef88757de4b86113fa135dd298,
+        type: 3}
+      propertyPath: Levels.Array.data[0]
+      value: 
+      objectReference: {fileID: 11400000, guid: e2576b87368a4494d8dadd0125c88230,
+        type: 2}
     - target: {fileID: 5636056259848974608, guid: e6f3f0ef88757de4b86113fa135dd298,
         type: 3}
       propertyPath: Levels.Array.data[1]
@@ -489,6 +495,36 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2022354949977633884, guid: 9e0e79bc4f3c5f347b7777aac2560eae,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2022354950058418626, guid: 9e0e79bc4f3c5f347b7777aac2560eae,
+        type: 3}
+      propertyPath: m_Pivot.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2022354950058418626, guid: 9e0e79bc4f3c5f347b7777aac2560eae,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2022354950058418626, guid: 9e0e79bc4f3c5f347b7777aac2560eae,
+        type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2022354950058418626, guid: 9e0e79bc4f3c5f347b7777aac2560eae,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 2022354950058418626, guid: 9e0e79bc4f3c5f347b7777aac2560eae,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 8832352461311907650, guid: 9e0e79bc4f3c5f347b7777aac2560eae,
         type: 3}

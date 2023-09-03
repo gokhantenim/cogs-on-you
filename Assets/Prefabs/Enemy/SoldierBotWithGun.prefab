@@ -265,7 +265,7 @@ GameObject:
   - component: {fileID: -7334319792213934712}
   - component: {fileID: 8857759407693067579}
   m_Layer: 10
-  m_Name: SoldierBot
+  m_Name: SoldierBotWithGun
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

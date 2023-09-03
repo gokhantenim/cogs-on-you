@@ -53,7 +53,6 @@ public class InputManager : MonoBehaviour
 
 	void Awake()
     {
-		Application.targetFrameRate = 60;
 		_playerInput = GetComponent<PlayerInput>();
     }
 

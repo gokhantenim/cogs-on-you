@@ -8,7 +8,7 @@ using DG.Tweening;
 using System;
 using UnityEngine.PlayerLoop;
 
-public class SoldierBot : Enemy
+public class SoldierBotWithGun : Enemy
 {
     StateMachine _stateMachine = new();
     State _wanderState;
@@ -267,11 +267,11 @@ public class SoldierBot : Enemy
             _stateMachine.SetState(_chaseState);
             return;
         }
-        if (Vector3.Distance(_lastAttackPosition, _lastKnownPosition) > 5)
-        {
-            _stateMachine.SetState(_chaseState);
-            return;
-        }
+        //if (Vector3.Distance(_lastAttackPosition, _lastKnownPosition) > 5)
+        //{
+        //    _stateMachine.SetState(_chaseState);
+        //    return;
+        //}
 
         Vector3 targetPosition = _lastKnownPosition + new Vector3(0, 2);
         Vector3 setPosition = Vector3.Lerp(_gunTarget.position, targetPosition, Time.deltaTime * 4);

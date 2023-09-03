@@ -65,6 +65,8 @@ public class Credits : MonoBehaviour, IPointerClickHandler
 <link=""https://freesound.org/people/MATRIXXX_/sounds/402767/"">Freesound - ""Retro, Coin 03.wav"" by MATRIXXX_</link>
 
 <link=""https://freesound.org/people/Kneeling/sounds/448002/"">Freesound - ""cannon.mp3"" by Kneeling</link>
+
+<link=""https://freesound.org/people/MATRIXXX_/sounds/657939/"">Freesound - ""Retro, SciFi Laser Sword, Unsheathed.wav"" by MATRIXXX_</link>
 </u>
 
 <size=200%><color=yellow>Images</color></size>

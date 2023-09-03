@@ -31,6 +31,7 @@ public class GameManager : MonoBehaviour
 
     void Awake()
     {
+        Application.targetFrameRate = 60;
         Instance = this;
         _transitionState = new(TransitionEnter);
         _homeState = new(HomeEnter, HomeExit);

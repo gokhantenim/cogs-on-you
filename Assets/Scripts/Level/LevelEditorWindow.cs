@@ -1,11 +1,10 @@
+#if UNITY_EDITOR
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEditor.SceneManagement;
-using UnityEditor.TerrainTools;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-
 public class LevelEditorWindow : EditorWindow
 {
     public static LevelDefinition SelectedLevel = null;
@@ -31,7 +30,6 @@ public class LevelEditorWindow : EditorWindow
 
     void OnDestroy()
     {
-        //SceneView.duringSceneGui -= OnSceneGUI;
         EditorApplication.playModeStateChanged -= OnPlayModeChanged;
         EditorSceneManager.sceneSaved -= OnSceneSaved;
     }
@@ -152,3 +150,4 @@ public class LevelEditorWindow : EditorWindow
         return scene.name.Equals(_levelEditorSceneName);
     }
 }
+#endif

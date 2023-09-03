@@ -5,9 +5,6 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using System.Linq;
 using DG.Tweening;
-using UnityEngine.Animations.Rigging;
-using System.Threading.Tasks;
-using static UnityEditor.Experimental.GraphView.GraphView;
 
 [RequireComponent(typeof(Scanner))]
 [RequireComponent(typeof(Cogs))]
@@ -362,25 +359,4 @@ public class PlayerController : MonoBehaviour
         Cogs cogs = GetComponent<Cogs>();
         cogs.TotalCogs = 0;
     }
-
-    //public void JumpAnimation()
-    //{
-    //    _animator.SetTrigger("jump");
-    //}
-
-    //public void GroundedAnimation(bool isGrounded)
-    //{
-    //    _animator.SetBool("grounded", isGrounded);
-    //}
-
-    //public void FreeFallAnimation(bool isFreeFall)
-    //{
-    //    _animator.SetBool("free_fall", isFreeFall);
-    //}
-
-    //public void WalkAnimation(float x, float z)
-    //{
-    //    _animator.SetFloat("move_x", x);
-    //    _animator.SetFloat("move_z", z);
-    //}
 }

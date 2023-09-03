@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 7509529727462161621}
   - component: {fileID: 8043892829998260010}
   m_Layer: 9
-  m_Name: space-terrain
+  m_Name: SpaceTerrain
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

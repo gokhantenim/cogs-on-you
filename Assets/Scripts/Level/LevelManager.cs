@@ -88,10 +88,13 @@ public class LevelManager : MonoBehaviour
         Transform levelParent = _objectsContainer.transform;
         foreach (LevelObjectDefinition levelObjectDefinition in LoadedLevel.LevelObjects)
         {
+#if UNITY_EDITOR
             GameObject levelObjectGameObject = Application.isPlaying ?
                 Instantiate(levelObjectDefinition.ObjectPrefab) :
                 (GameObject) PrefabUtility.InstantiatePrefab(levelObjectDefinition.ObjectPrefab);
-
+#else
+            GameObject levelObjectGameObject = Instantiate(levelObjectDefinition.ObjectPrefab);
+#endif
             levelObjectGameObject.transform.SetParent(levelParent);
             levelObjectGameObject.transform.position = levelObjectDefinition.Position;
             levelObjectGameObject.transform.rotation = Quaternion.Euler(levelObjectDefinition.EulerAngles);
