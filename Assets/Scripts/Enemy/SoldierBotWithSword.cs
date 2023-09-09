@@ -19,13 +19,9 @@ public class SoldierBotWithSword : Enemy
     [SerializeField] Animator _animator;
     Vector3 _lastKnownPosition = Vector3.zero;
 
-    Vector3 _lastAttackPosition;
-    Coroutine _attackCoroutine;
-    AudioSource _audioSource;
     float _wanderSpeed = 3;
-    float _chaseSpeed = 10;
-    float _attackDistance = 6;
-    //float _attackDelay = 2;
+    float _chaseSpeed = 8;
+    float _attackDistance = 5;
 
     protected override void Awake()
     {
@@ -33,7 +29,7 @@ public class SoldierBotWithSword : Enemy
         _chaseState = new(ChaseEnter, ChaseExit, Chase);
         _attackState = new(AttackEnter, AttackExit, Attack);
 
-        _audioSource = GetComponent<AudioSource>();
+        //_audioSource = GetComponent<AudioSource>();
         _agent = GetComponent<NavMeshAgent>();
         _animator.fireEvents = false;
         base.Awake();
@@ -178,26 +174,14 @@ public class SoldierBotWithSword : Enemy
 
     void AttackEnter()
     {
-        _lastAttackPosition = _lastKnownPosition;
+        //_lastAttackPosition = _lastKnownPosition;
         _animator.SetBool("attack", true);
-        //_attackCoroutine = StartCoroutine(AttackEnumerator());
+        SetAgentSpeed(0);
     }
-
-    //IEnumerator AttackEnumerator()
-    //{
-    //    _animator.SetTrigger("attack");
-    //    yield return new WaitForSeconds(_attackDelay);
-    //    AttackEnter();
-    //}
 
     void AttackExit()
     {
         _animator.SetBool("attack", false);
-        //try
-        //{
-        //    StopCoroutine(_attackCoroutine);
-        //}
-        //catch (NullReferenceException) { }
     }
 
     void Attack()

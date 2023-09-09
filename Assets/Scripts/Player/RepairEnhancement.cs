@@ -6,6 +6,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "RepairEnhancement", menuName = "Create Repair Enhancement")]
 public class RepairEnhancement : EnhancementDefinition
 {
+    public int RepairPercent = 0;
     public override void Buy()
     {
         Cogs cogs = PlayerController.Instance.GetComponent<Cogs>();
@@ -22,6 +23,8 @@ public class RepairEnhancement : EnhancementDefinition
         }
         SoundManager.Instance.PlayBuildSound();
         cogs.Spend(Cost);
-        damagable.ResetHealth();
+        float repairHealthAmount = damagable.MaxHealth * ((float) RepairPercent / 100);
+        float repairedHealth = damagable.Health + repairHealthAmount;
+        damagable.SetHealth(repairedHealth > damagable.MaxHealth ? damagable.MaxHealth : repairedHealth);
     }
 }

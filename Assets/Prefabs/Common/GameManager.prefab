@@ -24,6 +24,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6321711956121917374}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -0.12256527, y: 3.2233522, z: 0.66090536}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -31,7 +32,6 @@ Transform:
   m_Children:
   - {fileID: 4090054854077302273}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &5636056259848974608
 MonoBehaviour:
@@ -51,11 +51,12 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 1615ae4d9f8e45342906363277799c15, type: 2}
   - {fileID: 11400000, guid: 772458a23c22e0f4c8017de9293069d1, type: 2}
   Enhancements:
-  - {fileID: 11400000, guid: 10e5f65f05ac2094dbae54df395797ec, type: 2}
   - {fileID: 11400000, guid: 549ed5b394975e143a8523f2cb4978a6, type: 2}
+  - {fileID: 11400000, guid: 10e5f65f05ac2094dbae54df395797ec, type: 2}
+  - {fileID: 11400000, guid: 62aa7206bee6a6b4d96114e24e880e94, type: 2}
+  - {fileID: 11400000, guid: c8c3b3b1da5b2a444982c8e810b95baa, type: 2}
   Levels:
-  - {fileID: 11400000, guid: 5f494a01ab1c7d743a1d43ea04b8b4c5, type: 2}
-  - {fileID: 11400000, guid: ad0f2ff147975e64f91f067638c6f914, type: 2}
+  - {fileID: 11400000, guid: e2576b87368a4494d8dadd0125c88230, type: 2}
   CogPrefab: {fileID: 2927140540786661292, guid: b2ce6cff40652c745b28ac3c53e98ec7,
     type: 3}
   PlayerPrefab: {fileID: 1377454496584336413, guid: 5d9766cae48a06043b73671272607ef2,

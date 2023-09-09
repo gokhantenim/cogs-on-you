@@ -10,8 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3ee7ccdbd9c657544a6af2a491f5c697, type: 3}
-  m_Name: RepairEnhancement
+  m_Name: RepairEnhancement50
   m_EditorClassIdentifier: 
-  Name: Repair Health
-  Cost: 3000
+  Name: Repair Health 50%
+  Cost: 200
   Image: {fileID: 21300000, guid: 29c36361f01bd8042995973825a23f3b, type: 3}
+  RepairPercent: 50
