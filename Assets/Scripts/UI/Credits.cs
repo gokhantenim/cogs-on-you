@@ -89,7 +89,10 @@ public class Credits : MonoBehaviour, IPointerClickHandler
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        int linkIndex = TMP_TextUtilities.FindIntersectingLink(pTextMeshPro, Mouse.current.position.value, null);
+        Vector2 clickPosition = Application.isEditor
+            ? Mouse.current.position.value
+            : Touchscreen.current.position.value;
+        int linkIndex = TMP_TextUtilities.FindIntersectingLink(pTextMeshPro, clickPosition, null);
         if (linkIndex != -1)
         { // was a link clicked?
             TMP_LinkInfo linkInfo = pTextMeshPro.textInfo.linkInfo[linkIndex];

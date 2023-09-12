@@ -7,6 +7,7 @@ using UnityEngine.Animations.Rigging;
 using DG.Tweening;
 using System;
 using UnityEngine.PlayerLoop;
+using System.Linq;
 
 public class SoldierBotWithSword : Enemy
 {
@@ -19,6 +20,7 @@ public class SoldierBotWithSword : Enemy
     [SerializeField] Animator _animator;
     Vector3 _lastKnownPosition = Vector3.zero;
 
+    bool _isPlayerSeen = false;
     float _wanderSpeed = 3;
     float _chaseSpeed = 8;
     float _attackDistance = 5;
@@ -66,20 +68,20 @@ public class SoldierBotWithSword : Enemy
 
     public void OnScanPlayer(List<GameObject> seenPlayers)
     {
-        bool isPlayerSeen = seenPlayers.Count > 0;
-        if (isPlayerSeen)
+        _isPlayerSeen = seenPlayers.Count > 0;
+        if (_isPlayerSeen)
         {
             UpdatePlayerKnownPosition();
         }
-        if (isPlayerSeen && _stateMachine.IsState(_wanderState))
+        if (_isPlayerSeen && _stateMachine.IsState(_wanderState))
         {
             _stateMachine.SetState(_chaseState);
             return;
         }
-        if(!isPlayerSeen && !_stateMachine.IsState(_wanderState))
-        {
-            _stateMachine.SetState(_wanderState);
-        }
+        //if(!_isPlayerSeen && !_stateMachine.IsState(_wanderState))
+        //{
+        //    _stateMachine.SetState(_wanderState);
+        //}
     }
 
     void UpdatePlayerKnownPosition()
@@ -134,11 +136,16 @@ public class SoldierBotWithSword : Enemy
 
     void Chase()
     {
+        _agent.FindClosestEdge(out NavMeshHit hit);
         SetAgentDestination(_lastKnownPosition);
-        if (CheckFacingWithPlayer(10, _attackDistance))
+        if (_isPlayerSeen && CheckFacingWithPlayer(10, _attackDistance))
         {
             _stateMachine.SetState(_attackState);
             return;
+        }
+        if(_agent.remainingDistance < 1 && !_isPlayerSeen)
+        {
+            _stateMachine.SetState(_wanderState);
         }
     }
 
@@ -169,7 +176,19 @@ public class SoldierBotWithSword : Enemy
     void SetAgentDestination(Vector3 position)
     {
         if (!_agent.isOnNavMesh) return;
-        _agent.SetDestination(position);
+
+        NavMeshPath path = new NavMeshPath();
+        _agent.CalculatePath(position, path);
+
+        switch (path.status)
+        {
+            case NavMeshPathStatus.PathComplete:
+                _agent.SetDestination(position);
+                break;
+            case NavMeshPathStatus.PathPartial:
+                _agent.SetDestination(path.corners.Last());
+                break;
+        }
     }
 
     void AttackEnter()

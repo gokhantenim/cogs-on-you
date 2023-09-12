@@ -2,9 +2,8 @@ using UnityEngine;
 using UnityEngine.Audio;
 using DG.Tweening;
 
-public class SoundManager : MonoBehaviour
+public class SoundManager : AbstractSingleton<SoundManager>
 {
-    public static SoundManager Instance;
     public AudioMixer SoundMixer;
     public static float MasterVolume
     {
@@ -36,11 +35,6 @@ public class SoundManager : MonoBehaviour
     [SerializeField] AudioClip _alertSound;
 
     Tween _gasSoundTween;
-
-    void Awake()
-    {
-        Instance = this;
-    }
 
     void Start()
     {

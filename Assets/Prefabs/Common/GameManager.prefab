@@ -26,7 +26,7 @@ Transform:
   m_GameObject: {fileID: 6321711956121917374}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.12256527, y: 3.2233522, z: 0.66090536}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -56,14 +56,22 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 62aa7206bee6a6b4d96114e24e880e94, type: 2}
   - {fileID: 11400000, guid: c8c3b3b1da5b2a444982c8e810b95baa, type: 2}
   Levels:
+  - {fileID: 11400000, guid: 48a047d412d09c5498ed756f2f0501fe, type: 2}
   - {fileID: 11400000, guid: e2576b87368a4494d8dadd0125c88230, type: 2}
+  - {fileID: 11400000, guid: 50868b8d37d57c147969e0b0d8631a31, type: 2}
+  - {fileID: 11400000, guid: 625fbf5523f5b85498aa3a409468f620, type: 2}
+  _managers:
+  - {fileID: 5949285538623124080, guid: cfcda01765a938e4b8d4b38e0e380b93, type: 3}
+  - {fileID: 5127125500970920901, guid: 515e1645a5856ce45b13f2f7864ef5af, type: 3}
+  - {fileID: 1525095335294222363, guid: 9e0e79bc4f3c5f347b7777aac2560eae, type: 3}
+  - {fileID: 5977867098223930761, guid: 7da5d68f15e213c4d9678cfe1d3f6b3a, type: 3}
+  - {fileID: 1977900711554350959, guid: faaaae0253d4e3944aaf2a89eba010b1, type: 3}
   CogPrefab: {fileID: 2927140540786661292, guid: b2ce6cff40652c745b28ac3c53e98ec7,
     type: 3}
   PlayerPrefab: {fileID: 1377454496584336413, guid: 5d9766cae48a06043b73671272607ef2,
     type: 3}
   ExplosionPrefab: {fileID: 596446786563888225, guid: a66a9d5fc33c4db4ea3d1ce3c8f0a79a,
     type: 3}
-  CurrentLevelIndex: 0
 --- !u!1001 &774972904094344473
 PrefabInstance:
   m_ObjectHideFlags: 0

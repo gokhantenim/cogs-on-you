@@ -47,9 +47,9 @@
                 </ui:VisualElement>
             </ui:VisualElement>
             <ui:VisualElement name="Guns" style="background-color: rgba(0, 0, 0, 0.59); flex-grow: 1;">
-                <ui:ListView name="GunsList" fixed-item-height="250" focusable="true" show-alternating-row-backgrounds="None" class="guns-list" style="width: 100%; height: 100%;" />
+                <ui:ListView name="GunsList" fixed-item-height="300" focusable="true" show-alternating-row-backgrounds="None" virtualization-method="DynamicHeight" class="guns-list" style="width: 100%; height: 100%;" />
             </ui:VisualElement>
         </ui:VisualElement>
     </ui:VisualElement>
-    <ui:ListView name="Enhancements" fixed-item-height="250" focusable="true" show-alternating-row-backgrounds="None" selection-type="None" class="guns-list" style="position: absolute; top: 60%; bottom: 100px; right: 0; left: 0;" />
+    <ui:ListView name="Enhancements" fixed-item-height="150" focusable="true" show-alternating-row-backgrounds="None" selection-type="None" virtualization-method="DynamicHeight" class="guns-list" style="position: absolute; top: 60%; bottom: 100px; right: 0; left: 0;" />
 </ui:UXML>

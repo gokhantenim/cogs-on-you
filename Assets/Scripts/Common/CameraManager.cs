@@ -3,9 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CameraManager : MonoBehaviour
+public class CameraManager : AbstractSingleton<CameraManager>
 {
-    public static CameraManager Instance;
     public Camera Camera;
 
     public CinemachineVirtualCamera CameraFollowPlayer;
@@ -21,9 +20,9 @@ public class CameraManager : MonoBehaviour
     public State DeathState;
     public State HomeState;
 
-    void Awake()
+    protected override void Awake()
     {
-        Instance = this;
+        base.Awake();
         Camera = Camera.main;
 
         FollowPlayerState = new(
@@ -88,7 +87,6 @@ public class CameraManager : MonoBehaviour
 
     public void FaceGunSlot(GunSlot slot)
     {
-        //CameraFollowUISlot.gameObject.SetActive(true);
         CameraFollowUISlot.LookAt.position = slot.transform.position;
         StateMachine.SetState(FaceGunSlotState);
     }

@@ -6,30 +6,14 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class LevelManager : MonoBehaviour
+public class LevelManager : AbstractSingleton<LevelManager>
 {
-    public static LevelManager _instance;
-    public static LevelManager Instance
-    {
-        get {
-            if (_instance == null)
-            {
-                _instance = FindObjectOfType<LevelManager>(true);
-            }
-            return _instance;
-        }
-    }
     public LevelDefinition LoadedLevel;
     [SerializeField] NavMeshSurface[] _navigations;
     string _objectsContainerName = "LevelObjectsContainer";
     GameObject _objectsContainer;
     int _totalEnemies = 0;
     int _remainingEnemies = 0;
-
-    private void Awake()
-    {
-        
-    }
 
     Vector3 FlyDistance()
     {
@@ -66,6 +50,17 @@ public class LevelManager : MonoBehaviour
             agent.enabled = true;
         }
 
+        StartCoroutine(CountEnemiesAfterDestroys());
+    }
+
+    IEnumerator CountEnemiesAfterDestroys()
+    {
+        yield return new WaitForEndOfFrame();
+        CountEnemies();
+    }
+
+    void CountEnemies()
+    {
         Enemy[] enemies = FindObjectsOfType<Enemy>();
         _totalEnemies = enemies.Length;
         SetRemainingEnemies(_totalEnemies);
@@ -73,6 +68,7 @@ public class LevelManager : MonoBehaviour
 
     public void SetRemainingEnemies(int amount)
     {
+        if (GamePlayUI.Instance == null) return;
         _remainingEnemies = amount;
         GamePlayUI.Instance.SetEnemyCounts(amount, _totalEnemies);
     }

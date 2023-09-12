@@ -1,20 +1,21 @@
 using Cinemachine;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 
-public class GameManager : MonoBehaviour
+public class GameManager : AbstractSingleton<GameManager>
 {
-    public static GameManager Instance;
     [SerializeField] GameObject _homeScene;
     public List<GunDefinition> Guns;
     public List<EnhancementDefinition> Enhancements;
     public List<LevelDefinition> Levels;
+    [SerializeField] GameObject[] _managers;
     public GameObject CogPrefab;
     public GameObject PlayerPrefab;
     public GameObject ExplosionPrefab;
-    public int CurrentLevelIndex = 0;
+    [NonSerialized] public int CurrentLevelIndex = 0;
     bool _currentIsLastLevel => CurrentLevelIndex+1 >= Levels.Count;
     StateMachine _stateMachine = new();
     State _transitionState;
@@ -29,10 +30,10 @@ public class GameManager : MonoBehaviour
 
     PlayerController _player => PlayerController.Instance;
 
-    void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         Application.targetFrameRate = 60;
-        Instance = this;
         _transitionState = new(TransitionEnter);
         _homeState = new(HomeEnter, HomeExit);
         _warState = new(WarEnter);
@@ -43,6 +44,7 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
+        Install();
 #if UNITY_EDITOR
         if (LevelEditorWindow.IsEditScene())
         {
@@ -54,9 +56,13 @@ public class GameManager : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void Install()
     {
-
+        foreach (GameObject manager in _managers)
+        {
+            Instantiate(manager);
+        }
+        ResetPlayer();
     }
 
     void TransitionEnter()
@@ -184,7 +190,6 @@ public class GameManager : MonoBehaviour
 
     public void StartGame()
     {
-        ResetPlayer();
         GamePlayUI.Instance.ResetValues();
         Cogs.ClearAllCogs();
         StartLevel();
@@ -192,14 +197,18 @@ public class GameManager : MonoBehaviour
 
     void ResetPlayer()
     {
-        if (_player == null)
+        if(_player != null)
         {
-            Instantiate(PlayerPrefab);
+            if (Application.isEditor)
+            {
+                DestroyImmediate(_player.gameObject);
+            }
+            else
+            {
+                Destroy(_player.gameObject);
+            }
         }
-        else
-        {
-            _player.ResetPlayer();
-        }
+        Instantiate(PlayerPrefab);
     }
 
     public async void FlyToStartGame()
@@ -225,6 +234,12 @@ public class GameManager : MonoBehaviour
         _stateMachine.SetState(_homeState);
         Cogs.ClearAllCogs();
         LevelManager.Instance.ClearLevel();
+    }
+
+    public void RestartGame()
+    {
+        ResetPlayer();
+        StartGame();
     }
 
     LevelDefinition CurrentLevel()

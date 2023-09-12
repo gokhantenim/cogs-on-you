@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public class BuildUI : MonoBehaviour
+public class BuildUI : AbstractSingleton<BuildUI>
 {
     public StateMachine StateMachine = new();
     public State DisabledState;
@@ -17,7 +17,6 @@ public class BuildUI : MonoBehaviour
     public VisualTreeAsset enhancementItemTemplate;
 
     UIDocument document;
-    public static BuildUI Instance;
 
     GunSlotsUIController _slotsUI;
     GunSlotUIController _selectedSlotUI;
@@ -32,9 +31,9 @@ public class BuildUI : MonoBehaviour
 
     Camera _camera;
 
-    void Awake()
+    protected override void Awake()
     {
-        Instance = this;
+        base.Awake();
         DisabledState = new();
         PlayerBuildState = new(PlayerBuildEnter, PlayerBuildExit, PlayerBuildUpdate);
         GunSlotBuildState = new(GunSlotBuildEnter, GunSlotBuildExit);
@@ -135,14 +134,14 @@ public class BuildUI : MonoBehaviour
     public void InstallGun()
     {
         GameManager.Instance.InstallGun(SelectedSlot, _selectedGun);
-        _selectedSlotUI = new GunSlotUIController(document);
+        _selectedSlotUI.Refresh();
         _selectedSlotUI.SetSelectedGun(new GunSelectionItem(_selectedGun, SelectedSlot.CurrentGun));
     }
 
     public void UpgradeGun()
     {
         GameManager.Instance.UpgradeGun(SelectedSlot);
-        _selectedSlotUI = new GunSlotUIController(document);
+        _selectedSlotUI.Refresh();
         _selectedSlotUI.SetSelectedGun(new GunSelectionItem(_selectedGun, SelectedSlot.CurrentGun));
     }
 }

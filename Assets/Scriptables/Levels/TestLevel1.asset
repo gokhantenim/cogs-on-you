@@ -19,21 +19,21 @@ MonoBehaviour:
       type: 3}
     Position: {x: 58.6, y: 0, z: 136.1}
     EulerAngles: {x: 0, y: 270, z: 0}
-    Scale: {x: 1.0000033, y: 1, z: 1.0000033}
+    Scale: {x: 1.0000038, y: 1, z: 1.0000038}
     Health: 0
     TotalCogs: 0
   - ObjectPrefab: {fileID: 3401329256166917888, guid: a8ff1fa1be8e96f44a027ad197e31c07,
       type: 3}
     Position: {x: 89, y: -1.8000002, z: 46}
     EulerAngles: {x: -0, y: 48.139515, z: -0}
-    Scale: {x: 0.9999993, y: 1, z: 0.9999993}
+    Scale: {x: 0.99999917, y: 1, z: 0.99999917}
     Health: 0
     TotalCogs: 0
   - ObjectPrefab: {fileID: 8917172804837217911, guid: 675fc6975b63e494d9b31f6bad7c7588,
       type: 3}
     Position: {x: 0, y: 0, z: 0}
-    EulerAngles: {x: 52.745132, y: 328.1989, z: 5.999358}
-    Scale: {x: 1.0000005, y: 1.0000002, z: 1.0000006}
+    EulerAngles: {x: 52.745132, y: 328.1989, z: 5.999354}
+    Scale: {x: 1.0000006, y: 1.0000001, z: 1.0000006}
     Health: 0
     TotalCogs: 0
   - ObjectPrefab: {fileID: 2646862632070095974, guid: 3e3e4f347da0fd14399c53533c693e9d,
@@ -54,28 +54,28 @@ MonoBehaviour:
       type: 3}
     Position: {x: -61.5, y: 0, z: 37.899994}
     EulerAngles: {x: -0, y: 90, z: -0}
-    Scale: {x: 1.0000033, y: 1, z: 1.0000033}
+    Scale: {x: 1.0000038, y: 1, z: 1.0000038}
     Health: 0
     TotalCogs: 0
   - ObjectPrefab: {fileID: 3401329256166917888, guid: a8ff1fa1be8e96f44a027ad197e31c07,
       type: 3}
     Position: {x: -64, y: -1.8000002, z: 0}
     EulerAngles: {x: -0, y: 123.477, z: -0}
-    Scale: {x: 1.000002, y: 1, z: 1.000002}
+    Scale: {x: 1.0000024, y: 1, z: 1.0000024}
     Health: 0
     TotalCogs: 0
   - ObjectPrefab: {fileID: 252309073637451641, guid: 9ce57d0f84bfcc0428646a235d66d842,
       type: 3}
     Position: {x: -61.5, y: 0, z: -140.8}
     EulerAngles: {x: -0, y: 90, z: -0}
-    Scale: {x: 1.0000033, y: 1, z: 1.0000033}
+    Scale: {x: 1.0000038, y: 1, z: 1.0000038}
     Health: 0
     TotalCogs: 0
   - ObjectPrefab: {fileID: 252309073637451641, guid: 9ce57d0f84bfcc0428646a235d66d842,
       type: 3}
     Position: {x: 58.6, y: 0, z: 45.5}
     EulerAngles: {x: 0, y: 270, z: 0}
-    Scale: {x: 1.0000033, y: 1, z: 1.0000033}
+    Scale: {x: 1.0000038, y: 1, z: 1.0000038}
     Health: 0
     TotalCogs: 0
   - ObjectPrefab: {fileID: 3401329256166917888, guid: a8ff1fa1be8e96f44a027ad197e31c07,
@@ -89,21 +89,14 @@ MonoBehaviour:
       type: 3}
     Position: {x: 58.6, y: 0, z: -44.3}
     EulerAngles: {x: 0, y: 270, z: 0}
-    Scale: {x: 1.0000033, y: 1, z: 1.0000033}
+    Scale: {x: 1.0000038, y: 1, z: 1.0000038}
     Health: 0
     TotalCogs: 0
-  - ObjectPrefab: {fileID: 3693165051803579233, guid: a36f103f81c121740a21fc7940d86f9d,
-      type: 3}
-    Position: {x: -29, y: 0, z: -68}
-    EulerAngles: {x: -0, y: 0, z: 0}
-    Scale: {x: 1, y: 1, z: 1}
-    Health: 2000
-    TotalCogs: 5000
   - ObjectPrefab: {fileID: 252309073637451641, guid: 9ce57d0f84bfcc0428646a235d66d842,
       type: 3}
     Position: {x: 58.6, y: 0, z: -133.2}
     EulerAngles: {x: 0, y: 270, z: 0}
-    Scale: {x: 1.0000033, y: 1, z: 1.0000033}
+    Scale: {x: 1.0000038, y: 1, z: 1.0000038}
     Health: 0
     TotalCogs: 0
   - ObjectPrefab: {fileID: 252309073637451641, guid: 9ce57d0f84bfcc0428646a235d66d842,
@@ -117,13 +110,20 @@ MonoBehaviour:
       type: 3}
     Position: {x: -61.5, y: 0, z: -51.90001}
     EulerAngles: {x: -0, y: 90, z: -0}
-    Scale: {x: 1.0000033, y: 1, z: 1.0000033}
+    Scale: {x: 1.0000038, y: 1, z: 1.0000038}
     Health: 0
     TotalCogs: 0
   - ObjectPrefab: {fileID: 252309073637451641, guid: 9ce57d0f84bfcc0428646a235d66d842,
       type: 3}
     Position: {x: -61.5, y: 0, z: 128.5}
     EulerAngles: {x: -0, y: 90, z: -0}
-    Scale: {x: 1.0000033, y: 1, z: 1.0000033}
+    Scale: {x: 1.0000038, y: 1, z: 1.0000038}
     Health: 0
     TotalCogs: 0
+  - ObjectPrefab: {fileID: 4836876076924846002, guid: 03c72d0677d36fc42a8b7b73e65e14f2,
+      type: 3}
+    Position: {x: -14.32151, y: 0, z: -77.6}
+    EulerAngles: {x: -0, y: 0, z: 0}
+    Scale: {x: 1, y: 1, z: 1}
+    Health: 15000
+    TotalCogs: 6000

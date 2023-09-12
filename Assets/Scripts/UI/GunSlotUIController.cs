@@ -62,6 +62,18 @@ public partial class GunSlotUIController
         _upgradeButton.clicked += BuildUI.Instance.UpgradeGun;
     }
 
+    public void Refresh()
+    {
+        _gunsList.RefreshItems();
+    }
+
+    ~GunSlotUIController()
+    {
+        _backButton.clicked -= BuildUI.Instance.BackFromSlot;
+        _installButton.clicked -= BuildUI.Instance.InstallGun;
+        _upgradeButton.clicked -= BuildUI.Instance.UpgradeGun;
+    }
+
     public void SetCurrentGun(Gun gun)
     {
         if(gun == null)
@@ -114,11 +126,11 @@ public partial class GunSlotUIController
     {
         GunDefinition gun = _gunsList.selectedItem as GunDefinition;
         BuildUI.Instance.SelectGun(gun);
+        SoundManager.Instance.PlayButtonSound();
     }
 
     void CreateGunsList()
     {
-        _gunsList.fixedItemHeight = 300;
         _gunsList.Q<ScrollView>().verticalScrollerVisibility = ScrollerVisibility.Auto;
         _gunsList.makeItem = () => {
             TemplateContainer instantiatedTemplate = BuildUI.Instance.gunCardTemplate.Instantiate();

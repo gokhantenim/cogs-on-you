@@ -9,20 +9,8 @@ using DG.Tweening;
 [RequireComponent(typeof(Scanner))]
 [RequireComponent(typeof(Cogs))]
 [RequireComponent(typeof(Damagable))]
-public class PlayerController : MonoBehaviour
+public class PlayerController : AbstractSingleton<PlayerController>
 {
-    public static PlayerController _instance;
-    public static PlayerController Instance
-    {
-        get
-        {
-            if (_instance == null)
-            {
-                _instance = FindObjectOfType<PlayerController>(true);
-            }
-            return _instance;
-        }
-    }
     public StateMachine StateMachine = new();
     public State TransitionState;
     public State HomeComingState;
@@ -68,8 +56,10 @@ public class PlayerController : MonoBehaviour
     Vector3 _verticalMovement = Vector3.zero;
     Animator _animator;
 
-    void Awake()
+    protected override void Awake()
     {
+        Instance = this;
+
         _animator = GetComponent<Animator>();
         _magnetColliderRadius = _magnetCollider.radius;
         _fallTimeoutDelta = FallTimeout;
@@ -102,7 +92,6 @@ public class PlayerController : MonoBehaviour
         CameraManager.Instance.SetPlayer(this);
     }
 
-    // Update is called once per frame
     void Update()
     {
         StateMachine.Update();
@@ -336,20 +325,6 @@ public class PlayerController : MonoBehaviour
         yield return new WaitForSeconds(0.4f);
         jumpAction();
     }
-
-    //public void OnJumpAnimCompleted()
-    //{
-    //    if (StateMachine.IsState(WarState))
-    //    {
-    //        Jumping = true;
-    //        return;
-    //    }
-
-    //    if (StateMachine.IsState(TransitionState) || StateMachine.IsState(HomeState))
-    //    {
-    //        transform.DOMoveY(transform.position.y + FlyingDistance, 1);
-    //    }
-    //}
 
     public void ResetPlayer()
     {

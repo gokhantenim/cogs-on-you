@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: MagneticShieldEnhancement
   m_EditorClassIdentifier: 
   Name: Magnetic Shield
-  Cost: 1000
+  Cost: 2000
   Image: {fileID: 21300000, guid: 15b0b2dc08647e641b0cccadf6f6ce80, type: 3}
   ShieldPrefab: {fileID: 7258249418490661040, guid: 3cab98b271b0d524b84c3693ab66ac1a,
     type: 3}

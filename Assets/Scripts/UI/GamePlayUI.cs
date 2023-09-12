@@ -6,21 +6,8 @@ using TMPro;
 using UnityEngine.UI;
 using static UnityEngine.Rendering.DebugUI;
 
-public class GamePlayUI : MonoBehaviour
+public class GamePlayUI : AbstractSingleton<GamePlayUI>
 {
-    public static GamePlayUI _instance;
-    public static GamePlayUI Instance
-    {
-        get
-        {
-            if (_instance == null)
-            {
-                _instance = FindObjectOfType<GamePlayUI>(true);
-            }
-            return _instance;
-        }
-    }
-
     [SerializeField] Transform _greenBar;
     [SerializeField] Transform _whiteBar;
     [SerializeField] TextMeshProUGUI _healthPercentText;

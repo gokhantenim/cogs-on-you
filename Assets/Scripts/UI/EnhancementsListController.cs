@@ -23,7 +23,6 @@ public partial class EnhancementsListController
 
     void CreateList()
     {
-        _list.fixedItemHeight = 150;
         _list.Q<ScrollView>().verticalScrollerVisibility = ScrollerVisibility.Auto;
         _list.makeItem = () => {
             TemplateContainer instantiatedTemplate = BuildUI.Instance.enhancementItemTemplate.Instantiate();

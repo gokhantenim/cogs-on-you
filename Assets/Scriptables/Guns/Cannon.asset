@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 96ca8f4304cf0ae418db51c68e101246, type: 3}
+  m_Name: Cannon
+  m_EditorClassIdentifier: 
+  Name: Cannon
+  GunPrefab: {fileID: 7991975295436015599, guid: d7355e91a4d10904b9e29588705d7799,
+    type: 3}
+  Levels:
+  - Damage: 1000
+    FireRate: 1
+    MagazineCapacity: 1
+    ReloadTime: 2
+    Cost: 2500
+  - Damage: 1200
+    FireRate: 1
+    MagazineCapacity: 1
+    ReloadTime: 1.75
+    Cost: 1000

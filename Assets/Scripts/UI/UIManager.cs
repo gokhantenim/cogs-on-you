@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 
-public class UIManager : MonoBehaviour
+public class UIManager : AbstractSingleton<UIManager>
 {
-    public static UIManager Instance;
     public BuildUI BuildUI;
     public GamePlayUI GamePlayUI;
     public GameObject HomeUI;
@@ -20,9 +19,10 @@ public class UIManager : MonoBehaviour
     public State GamePauseState;
     public State BuildState;
 
-    void Awake()
+    protected override void Awake()
     {
-        Instance = this;
+        base.Awake();
+
         BuildUI.gameObject.SetActive(false);
         GamePlayUI.gameObject.SetActive(false);
         HomeUI.gameObject.SetActive(false);
@@ -80,15 +80,13 @@ public class UIManager : MonoBehaviour
         Modal.Show(Modal.SettingsModalView);
     }
 
-    public async void RestartGameButton()
+    public void RestartGameButton()
     {
-        await Task.Delay(100);
-        GameManager.Instance.StartGame();
+        GameManager.Instance.RestartGame();
     }
 
-    public async void HomeButton()
+    public void HomeButton()
     {
-        await Task.Delay(100);
         GameManager.Instance.GoHome();
     }
 

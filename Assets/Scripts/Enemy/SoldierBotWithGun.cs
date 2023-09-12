@@ -7,6 +7,7 @@ using UnityEngine.Animations.Rigging;
 using DG.Tweening;
 using System;
 using UnityEngine.PlayerLoop;
+using System.Linq;
 
 public class SoldierBotWithGun : Enemy
 {
@@ -25,6 +26,9 @@ public class SoldierBotWithGun : Enemy
     [SerializeField] GameObject _gunFirePoint;
     [SerializeField] GameObject _gunLaserEnd;
     Vector3 _lastKnownPosition = Vector3.zero;
+
+    float _wanderSpeed = 3;
+    float _chaseSpeed = 8;
 
     Vector3 _initialLaserScale;
     Vector3 _lastAttackPosition;
@@ -107,6 +111,7 @@ public class SoldierBotWithGun : Enemy
     void WanderEnter()
     {
         SetAgentPlay(false);
+        SetAgentSpeed(_wanderSpeed);
     }
 
     void WanderExit()
@@ -160,6 +165,7 @@ public class SoldierBotWithGun : Enemy
     {
         SetAgentPlay(false);
         SetAgentDestination(_lastKnownPosition);
+        SetAgentSpeed(_chaseSpeed);
     }
 
     void ChaseExit()
@@ -176,7 +182,25 @@ public class SoldierBotWithGun : Enemy
     void SetAgentDestination(Vector3 position)
     {
         if (!_agent.isOnNavMesh) return;
-        _agent.SetDestination(position);
+
+        NavMeshPath path = new NavMeshPath();
+        _agent.CalculatePath(position, path);
+
+        switch (path.status)
+        {
+            case NavMeshPathStatus.PathComplete:
+                _agent.SetDestination(position);
+                break;
+            case NavMeshPathStatus.PathPartial:
+                _agent.SetDestination(path.corners.Last());
+                break;
+        }
+    }
+
+    void SetAgentSpeed(float speed)
+    {
+        if (!_agent.isOnNavMesh) return;
+        _agent.speed = speed;
     }
 
     void SetArmRigWeight(float value)

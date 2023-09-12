@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: RepairEnhancement25
   m_EditorClassIdentifier: 
   Name: Repair Health 25%
-  Cost: 100
+  Cost: 1000
   Image: {fileID: 21300000, guid: 29c36361f01bd8042995973825a23f3b, type: 3}
   RepairPercent: 25

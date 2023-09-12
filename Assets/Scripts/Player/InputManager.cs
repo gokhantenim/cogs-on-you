@@ -7,20 +7,8 @@ using UnityEngine.InputSystem;
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
 [RequireComponent(typeof(PlayerInput))]
 #endif
-public class InputManager : MonoBehaviour
+public class InputManager : AbstractSingleton<InputManager>
 {
-    public static InputManager _instance;
-    public static InputManager Instance
-    {
-        get
-        {
-            if (_instance == null)
-            {
-                _instance = FindObjectOfType<InputManager>(true);
-            }
-            return _instance;
-        }
-    }
     PlayerController _player => PlayerController.Instance;
     [Header("Character Input Values")]
     public Vector3 Move;
@@ -51,8 +39,9 @@ public class InputManager : MonoBehaviour
         }
     }
 
-	void Awake()
+	protected override void Awake()
     {
+		base.Awake();
 		_playerInput = GetComponent<PlayerInput>();
     }
 
